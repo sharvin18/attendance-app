@@ -1,5 +1,6 @@
 # attendance_app
 
+This will be the best application.
 A new Flutter application.
 
 ## Getting Started
