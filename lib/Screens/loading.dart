@@ -25,7 +25,7 @@ class Loading extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SpinKitThreeBounce(
+              SpinKitChasingDots(
                 color: Colors.blue[900],
                 size: 50.0,
               ),
