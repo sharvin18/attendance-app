@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-String name,email,profileimg;
+String name,email,profileimg,total="0";
 List subjects,year;
 bool existence;
 
@@ -31,4 +31,14 @@ Future getTeacher() async {
     });
   } catch (e) {}
 
+}
+
+
+Future<String> getTotalStudents(String branch, String year)async{
+  await FirebaseFirestore.instance.
+    collection(branch).
+    doc(year).
+    get().
+    then((val)=>total = val.get('total_students'));
+  print(total);
 }

@@ -115,6 +115,9 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         ),
                       ),
                     ),
+                    //SizedBox(height: 15),
+                    Divider(color: Color(0XFFDADADA), height: 1),
+                    //SizedBox(height: 15),
                     GestureDetector(
                       onTap: () async {
                         await _auth.signOutGoogle();
