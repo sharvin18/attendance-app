@@ -1,4 +1,5 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:attendance_app/Screens/subclass.dart';
 import 'package:flutter/material.dart';
 
@@ -21,16 +22,7 @@ class _HomeState extends State<Home> {
       key: _scaffoldKey,
       body: Stack(
         children: [
-          Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color(0xFF3a5af9), Color(0xFF7449fa),],
-                stops:[0.0, 0.8],
-              ),
-            ),
-          ),
+          customContainer(height, width),
           Container(
             color: Colors.transparent,
             child: Column(

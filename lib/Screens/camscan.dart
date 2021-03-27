@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:attendance_app/Screens/confirm_attendance.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,9 @@ import '../main.dart';
 
 class Camscan extends StatefulWidget {
   final List id ;
-  Camscan(this.id);
+  final String branch;
+  final String subject;
+  Camscan(this.id, this.branch, this.subject);
 
   @override
   _CamscanState createState() => _CamscanState();
@@ -34,18 +37,20 @@ class _CamscanState extends State<Camscan> {
     //String pattern2 = r".:";
     //RegExp regEx = RegExp(pattern);
 
-    String uid = "";
+    String id = "";
 
     for (TextBlock block in visionText.blocks) {
       for (TextLine line in block.lines) {
         // Checking if the line contains an email address
-        print("Reached here");
-        if (line.text.toString().contains("ID No.:")) {
+        print(line.text.toString());
+        if (line.text.toString().contains("No.:")) {
           List idno = line.text.toString().split(" ");
           if (widget.id.contains(idno[idno.length-1])){
             print(idno[idno.length - 1]);
-            uid += line.text;
+            id += line.text;
             present_id.add(idno[idno.length - 1]);
+            print(present_id.toString());
+
             break;
           }
           else{
@@ -55,7 +60,7 @@ class _CamscanState extends State<Camscan> {
         }
       }
     }
-    print(uid);
+    print(id);
   }
 
   Future<String> _takePicture() async {
@@ -126,31 +131,72 @@ class _CamscanState extends State<Camscan> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('CamScan'),
-      ),
       body: _controller.value.isInitialized
           ? Stack(
         children: <Widget>[
           CameraPreview(_controller),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
-              alignment: Alignment.bottomCenter,
-              child: RaisedButton.icon(
-                icon: Icon(Icons.camera),
-                label: Text("Click"),
-                onPressed: () async {
-                  await _takePicture().then((String path) async  {
-                    if (path != null) {
-                      print("Clicked");
-                      await scan(path) ;
-                    }
-                  });
-                },
+              color: Colors.black.withOpacity(0.6),
+              height: MediaQuery.of(context).size.height * 0.18,
+              width: MediaQuery.of(context).size.width,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.red,
+                        ),
+                        child: Icon(Icons.clear, color: Colors.white, size: 40,),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await _takePicture().then((String path) async  {
+                          if (path != null) {
+                            print("Clicked");
+                            await scan(path) ;
+                          }
+                        });
+                      },
+                      child: Container(
+                        height: 75,
+                        width: 75,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(80),
+                          color: Colors.grey[300],
+                        ),
+                        child: Icon(Icons.camera, color: Colors.black,size: 50,),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(present_id, widget.branch, widget.subject)));
+                      },
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.green,
+                        ),
+                        child: Icon(Icons.arrow_forward_ios_sharp, color: Colors.white, size: 35,),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          )
+          ),
         ],
       )
           : Container(

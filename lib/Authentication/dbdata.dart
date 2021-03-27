@@ -42,3 +42,27 @@ Future<String> getTotalStudents(String branch, String year)async{
     then((val)=>total = val.get('total_students'));
   print(total);
 }
+
+// Future getStudentDetails(String id, String branch, String yr) async {
+//   List details = [];
+//   await FirebaseFirestore.instance.
+//     collection(branch).
+//     doc(yr).collection("students").doc(id).get().then(
+//       (value){
+//         details.add(value.get('name'));
+//         details.add(value.get('roll'));
+//         details.add(value.get('id'));
+//       }
+//   );
+// }
+
+Future markAttendance(List attend, String branch, String yr, var date) async {
+  return await FirebaseFirestore.instance.
+    collection(branch).
+    doc(yr).
+    collection("Attendance").
+    doc(date).set({
+      'present_students': attend,
+      'date': date,
+  });
+}

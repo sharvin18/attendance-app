@@ -1,4 +1,5 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -37,16 +38,7 @@ class _SubClassState extends State<SubClass> {
       key: _scaffoldKey,
       body: Stack(
         children: [
-          Container(
-            height: height,
-            width: width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(colors: [
-                Color(0xFF3a5af9), Color(0xFF7449fa),],
-                stops:[0.0, 0.8],
-              ),
-            ),
-          ),
+          customContainer(height, width),
           Container(
             color: Colors.transparent,
             child: Column(
@@ -89,7 +81,7 @@ class _SubClassState extends State<SubClass> {
                                     onPressed: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => Camscan(ids),
+                                        builder: (context) => Camscan(ids, widget.course, widget.subject),
                                       ),
                                     )
                                 ),
@@ -154,7 +146,7 @@ class _SubClassState extends State<SubClass> {
                   ),
                   child: SingleChildScrollView(
                     child: Padding(
-                      padding: const EdgeInsets.only(left:16.0, right:20.0),
+                      padding: const EdgeInsets.only(left:14.0, right:18.0),
                       child: Column(
                         children: [
                           StreamBuilder<QuerySnapshot>(
@@ -162,6 +154,7 @@ class _SubClassState extends State<SubClass> {
                                   .collection(detail[1].toLowerCase())
                                   .doc(detail[0])
                                   .collection('students')
+                                  // .orderBy('roll', descending: false)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
@@ -197,7 +190,7 @@ class _SubClassState extends State<SubClass> {
                                         ),
                                       ),
                                     ) : Padding(
-                                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                                       child: Container(
                                         child: ListView.separated(
                                             physics: NeverScrollableScrollPhysics(),
@@ -214,13 +207,25 @@ class _SubClassState extends State<SubClass> {
                                               return Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    studentlist.data()['name'],
-                                                    style: TextStyle(
-                                                      fontFamily: "Regular",
-                                                      fontWeight: FontWeight.w500,
-                                                      fontSize: 20.0,
-                                                    ),
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "${studentlist.data()['roll']}. ",
+                                                        style: TextStyle(
+                                                          fontFamily: "Regular",
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 18.0,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        studentlist.data()['name'],
+                                                        style: TextStyle(
+                                                          fontFamily: "Regular",
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 20.0,
+                                                        ),
+                                                      )
+                                                    ],
                                                   ),Text(
                                                     studentlist.data()['id'],
                                                     style: TextStyle(
