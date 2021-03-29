@@ -1,16 +1,21 @@
 import 'package:animations/animations.dart';
 import 'package:attendance_app/Authentication/auth.dart';
 import 'package:attendance_app/Screens/signIn.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'Authentication/dbdata.dart';
 import 'Screens/home.dart';
+
+List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   try {
     WidgetsFlutterBinding.ensureInitialized();
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    cameras = await availableCameras();
   }catch (e) {
     print(e);
   }

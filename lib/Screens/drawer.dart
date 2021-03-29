@@ -1,5 +1,6 @@
 import 'package:attendance_app/Authentication/auth.dart';
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Screens/settings.dart';
 import 'package:attendance_app/Screens/signIn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +96,12 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         )),
                     SizedBox(height: 30),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context)=> Settings())
+                        );
+                      },
                       child: Container(
                         color: Color(0XFFFFFFFF),
                         padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
@@ -115,6 +121,9 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         ),
                       ),
                     ),
+                    //SizedBox(height: 15),
+                    Divider(color: Color(0XFFDADADA), height: 1),
+                    //SizedBox(height: 15),
                     GestureDetector(
                       onTap: () async {
                         await _auth.signOutGoogle();

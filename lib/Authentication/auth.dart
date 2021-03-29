@@ -4,8 +4,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'dbdata.dart';
 import 'package:flutter/material.dart';
 
-bool loading = false;
-
 class AuthServices {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,10 +25,11 @@ class AuthServices {
     final UserCredential authResult =
     await _auth.signInWithCredential(credential);
     final User user = authResult.user;
+    loading = true;
 
     if (user != null) {
       // Checking if email and name is null
-      loading = true;
+
       assert(user.email != null);
       assert(user.displayName != null);
       assert(user.photoURL != null);
