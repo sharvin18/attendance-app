@@ -12,6 +12,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loading = false;
+  }
 
   @override
   Widget build(BuildContext context) {

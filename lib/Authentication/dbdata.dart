@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 String name,email,profileimg,total="0";
 List subjects,year;
 bool existence;
+bool loading;
 
 Future<void> addTeacher(String uid, String name, String email, String profileimg) async {
   return await FirebaseFirestore.instance.collection("teachers").doc(uid).set({

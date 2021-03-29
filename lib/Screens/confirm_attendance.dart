@@ -1,5 +1,6 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
 import 'package:attendance_app/Helpers/widgets.dart';
+import 'package:attendance_app/Screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -20,19 +21,40 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   var date = new DateFormat.yMd().format(new DateTime.now());
   String newDate = "";
   List details = [];
+  List dateFormat = [];
+  List correctDate = [];
+  bool _loading = false;
+
+  final snackBar = SnackBar(
+    backgroundColor: Colors.black.withOpacity(0.8),
+    content: Text(
+      "No Student present!",
+      style: TextStyle(
+        fontFamily: "Medium",
+      ),
+    ),
+    duration: Duration(seconds: 2),
+  );
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     details = widget.branch.split("-");
-    newDate = date.split("/").join("-");
+    dateFormat = date.split("/");
+    correctDate.add(dateFormat[1]);
+    correctDate.add(dateFormat[0]);
+    correctDate.add(dateFormat[2]);
+    newDate = correctDate.join("-");
+    _loading = false;
     print(newDate);
   }
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    return Scaffold(
+    return _loading ? Loading("Saving Attendance ...") :
+    Scaffold(
       body: Stack(
         children: [
           customContainer(height, width),
@@ -65,11 +87,17 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                               child: IconButton(
                                   icon: Icon(Icons.done_sharp, color: Colors.white, size: 28),
                                   onPressed: () async {
-                                    await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], newDate);
-                                    Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(builder: (context)=>Home()),
-                                      (route) => false);
+                                    if(widget.attendance.length > 0){
+                                      setState(()=> _loading = true);
+                                      await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], newDate);
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(builder: (context)=>Home()),
+                                              (route) => false);
+                                    }else{
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                    }
+
                                   }
                               ),
                             )
@@ -96,7 +124,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                   .collection(details[1].toLowerCase())
                                   .doc(details[0])
                                   .collection('students')
-                                  //.orderBy('roll', descending: false)
+                                  .orderBy('roll', descending: false)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {

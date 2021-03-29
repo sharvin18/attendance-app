@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import '../main.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class Camscan extends StatefulWidget {
   final List id ;
@@ -22,9 +23,23 @@ class _CamscanState extends State<Camscan> {
   CameraController _controller;
   File imageFile;
   List present_id;
+  bool _load = false;
 
 
-  Future scan(String imgpath) async{
+  final snackBar = SnackBar(
+    backgroundColor: Colors.white,
+
+    content: Text(
+      "Couldn\'t scan the ID, Try Again.",
+      style: TextStyle(
+        fontFamily: "Medium",
+        color: Colors.black,
+      ),
+    ),
+    duration: Duration(seconds: 2),
+  );
+
+  Future<String> scan(String imgpath) async{
     final File imageFile = File(imgpath);
 
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imageFile);
@@ -32,10 +47,6 @@ class _CamscanState extends State<Camscan> {
     final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
 
     final VisionText visionText = await textRecognizer.processImage(visionImage);
-
-    //String pattern = r"^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)$";
-    //String pattern2 = r".:";
-    //RegExp regEx = RegExp(pattern);
 
     String id = "";
 
@@ -47,7 +58,7 @@ class _CamscanState extends State<Camscan> {
           List idno = line.text.toString().split(" ");
           if (widget.id.contains(idno[idno.length-1])){
             print(idno[idno.length - 1]);
-            id += line.text;
+            id = idno[idno.length - 1];
             present_id.add(idno[idno.length - 1]);
             print(present_id.toString());
 
@@ -60,7 +71,7 @@ class _CamscanState extends State<Camscan> {
         }
       }
     }
-    print(id);
+    return id;
   }
 
   Future<String> _takePicture() async {
@@ -130,7 +141,11 @@ class _CamscanState extends State<Camscan> {
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     return Scaffold(
+      key: _scaffoldKey,
       body: _controller.value.isInitialized
           ? Stack(
         children: <Widget>[
@@ -139,8 +154,8 @@ class _CamscanState extends State<Camscan> {
             alignment: Alignment.bottomCenter,
             child: Container(
               color: Colors.black.withOpacity(0.6),
-              height: MediaQuery.of(context).size.height * 0.18,
-              width: MediaQuery.of(context).size.width,
+              height: height * 0.18,
+              width: width,
               child: Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -161,10 +176,19 @@ class _CamscanState extends State<Camscan> {
                     ),
                     GestureDetector(
                       onTap: () async {
+                        setState(()=> _load = true);
                         await _takePicture().then((String path) async  {
                           if (path != null) {
                             print("Clicked");
-                            await scan(path) ;
+                            String student_id = await scan(path);
+                            print("Student id: ${student_id}");
+                            setState(()=> _load = false);
+                            if(student_id.length != 9){
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            }
+                          }else{
+                            setState(()=> _load = false);
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
                           }
                         });
                       },
@@ -197,10 +221,21 @@ class _CamscanState extends State<Camscan> {
               ),
             ),
           ),
+          _load ? Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: Center(
+              child: SpinKitFadingCircle(
+                color: Colors.blue[600],
+                size: 60.0,
+              ),
+            ),
+          ) : Container()
         ],
       )
           : Container(
-        color: Colors.black,
+        color: Colors.transparent,
         child: Center(
           child: CircularProgressIndicator(),
         ),

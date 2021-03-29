@@ -154,7 +154,7 @@ class _SubClassState extends State<SubClass> {
                                   .collection(detail[1].toLowerCase())
                                   .doc(detail[0])
                                   .collection('students')
-                                  // .orderBy('roll', descending: false)
+                                  .orderBy('roll', descending: false)
                                   .snapshots(),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) {
@@ -202,6 +202,7 @@ class _SubClassState extends State<SubClass> {
                                             itemBuilder: (BuildContext context, index) {
 
                                               DocumentSnapshot studentlist = snapshot.data.docs[index];
+                                              print(studentlist.data());
                                               ids.add(studentlist.data()['id']);
 
                                               return Row(

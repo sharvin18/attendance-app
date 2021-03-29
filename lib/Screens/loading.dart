@@ -26,7 +26,7 @@ class Loading extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SpinKitChasingDots(
-                color: Colors.blue[900],
+                color: Colors.blue[800],
                 size: 50.0,
               ),
               SizedBox(height: 15,),
