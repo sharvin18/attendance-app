@@ -1,4 +1,8 @@
+import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/constants.dart';
 import 'package:flutter/material.dart';
+
+import 'home.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -6,72 +10,87 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+
+  bool counter;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if(themeColor == "white"){
+      counter = false;
+    }else{
+      counter = true;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.black45,
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: bgCardColor,
         title: Text(
           'Settings',
           style: TextStyle(
-            color: Colors.black45,
+            color:textColor,
             fontWeight: FontWeight.bold,
           ),
         ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: iconColor,),
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context)=>Home())
+            );
+          },
+        ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-              ),
-              margin: const EdgeInsets.all(5.0),
-              child: ListTile(
-                title: Text(
-                  "USER",
-                  style: TextStyle(
-                    color: Colors.white70,
+      body: Container(
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        color: bgColor,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(height: 10.0),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10.0),
+                    color: bgCardColor,
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      SwitchListTile(
+                        activeColor: Colors.purple,
+                        contentPadding: const EdgeInsets.all(12),
+                        value: counter,
+                        title: Text(
+                          "Dark Theme",
+                          style: TextStyle(
+                            color: textColor,
+                          )
+                        ),
+                        onChanged: (val) async {
+                          setState(()=> counter = !counter);
+                          if(counter == true){
+                            setState(() => themeColor = "dark");
+                            appTheme("dark");
+                            await changeTheme("dark");
+                          }else{
+                            setState(() => themeColor = "white");
+                            appTheme("white");
+                            await changeTheme("white");
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
-              ),
+              ],
             ),
-            const SizedBox(height: 10.0),
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-              ),
-              child: Column(
-                children: <Widget>[
-                  SwitchListTile(
-                    activeColor: Colors.purple,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: false,
-                    title: Text("Dark Theme"),
-                    onChanged: (val){},
-                  ),
-                  SwitchListTile(
-                    activeColor: Colors.purple,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: false,
-                    title: Text(""),
-                    onChanged: (val){},
-                  ),
-                  SwitchListTile(
-                    activeColor: Colors.purple,
-                    contentPadding: const EdgeInsets.all(0),
-                    value: false,
-                    title: Text("Dark Theme"),
-                    onChanged: (val){},
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ) ,
     );

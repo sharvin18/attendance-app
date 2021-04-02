@@ -1,4 +1,5 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:attendance_app/Screens/subclass.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
+  bool hi = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -21,76 +22,89 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    final h = MediaQuery.of(context).size.height;
+    final w = MediaQuery.of(context).size.width;
     final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    print(h);
+    print(h - 153);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
         children: [
-          customContainer(height, width),
+          customContainer(h, w),
           Container(
             color: Colors.transparent,
             child: Column(
+              mainAxisSize: MainAxisSize.max,
               children: [
                 PreferredSize(
                   preferredSize: Size.fromHeight(60),
                   child: SafeArea(
                     child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.menu_rounded, color: Colors.white, size: 28.0,),
-                                  onPressed: (){
-                                    _scaffoldKey.currentState.openDrawer();
-                                  }
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left:10.0, top:5.0),
-                                  child: Text(
-                                      'MarkU',
-                                      style: TextStyle(
-                                          fontFamily: "Medium",
-                                          fontSize: 24.0,
-                                          color: Colors.white
-                                      )
+                      height: 60,
+                      width: w,
+                      color: themeColor == "dark" ? bgCardColor : Colors.transparent,
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.menu_rounded, color: iconColor, size: 28.0,),
+                                    onPressed: (){
+                                      _scaffoldKey.currentState.openDrawer();
+                                    }
                                   ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top:5.0),
-                              child: IconButton(
-                                icon: Icon(Icons.notifications_none_sharp, color: Colors.white, size: 28),
-                                onPressed: (){}
+                                  Padding(
+                                    padding: const EdgeInsets.only(left:10.0, top:5.0),
+                                    child: Text(
+                                        'MarkU',
+                                        style: TextStyle(
+                                            fontFamily: "Medium",
+                                            fontSize: 24.0,
+                                            color: textColor,
+                                        )
+                                    ),
+                                  ),
+                                ],
                               ),
-                            )
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(top:5.0),
+                                child: IconButton(
+                                  icon: Icon(Icons.notifications_none_sharp, color: iconColor, size: 28),
+                                  onPressed: (){}
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   )
                 ),
                 SizedBox(height: 28.0,),
-                Text(
-                  'Manage Your Classrooms',
-                    style: TextStyle(
-                      fontFamily: "Bold",
-                      fontSize: 20.0,
-                      color: Colors.white
-                    )
+                Container(
+                  height:30,
+                  child: Text(
+                    'Manage Your Classrooms',
+                      style: TextStyle(
+                        fontFamily: "Bold",
+                        fontSize: 20.0,
+                        color:textColor,
+                      )
+                  ),
                 ),
                 SizedBox(height: 35.0,),
                 Container(
-                  height: height - 165,
+                  //height: h - 153,
+                  //height: height - 165,
+                  height: h - 177,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(40.0)),
-                    color: Colors.white,
+                    color: bgColor,
                   ),
                   child: SingleChildScrollView(
                     child: Padding(
@@ -104,6 +118,7 @@ class _HomeState extends State<Home> {
                               style: TextStyle(
                                 fontFamily: "Bold",
                                 fontSize: 20.0,
+                                color: textColor,
                               ),
                             ),
                           )
@@ -116,6 +131,8 @@ class _HomeState extends State<Home> {
                                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                                   child: GestureDetector(
                                       onTap: () async {
+                                        print(h);
+                                        print(h - 153);
                                         List detail = year[index].split("-");
                                         await getTotalStudents(detail[1].toLowerCase(),detail[0]);
                                         Navigator.push(
@@ -126,10 +143,10 @@ class _HomeState extends State<Home> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           gradient: LinearGradient(
-                                            colors: index%4==0? [Colors.blue[500], Colors.blue[200]]
-                                                : index%4==1?[Colors.green[500], Colors.green[200]]
-                                                : index%4==2?[Colors.orange[500], Colors.orange[200]]
-                                                : [Colors.purple[500], Colors.purple[200]],
+                                            colors: index%4==0? [card1Dark, card1Light]
+                                                : index%4==1?[card2Dark, card2Light]
+                                                : index%4==2?[card3Dark, card3Light]
+                                                : [card4Dark, card4Light],
                                             stops:[0.0, 0.8],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
@@ -137,7 +154,7 @@ class _HomeState extends State<Home> {
                                           borderRadius: BorderRadius.only(topRight: Radius.circular(30.0),bottomRight: Radius.circular(30.0),
                                               topLeft: Radius.circular(15.0),bottomLeft: Radius.circular(15.0)),
                                           //borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          boxShadow: [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 2, spreadRadius: 2)],
+                                          //boxShadow: [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 2, spreadRadius: 2)],
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
@@ -153,7 +170,7 @@ class _HomeState extends State<Home> {
                                                         style: TextStyle(
                                                             fontFamily: "Medium",
                                                             fontSize: 24.0,
-                                                            color: Colors.black54
+                                                            color: Colors.grey[800],
                                                         )
                                                     ),
                                                   )
@@ -170,8 +187,8 @@ class _HomeState extends State<Home> {
                                                         style: TextStyle(
                                                             fontFamily: "Medium",
                                                             fontSize: 18.0,
-                                                            color: Colors.black87
-                                                        )
+                                                            color: Colors.black,
+                                                        ),
                                                     ),
                                                   )
                                                 ],

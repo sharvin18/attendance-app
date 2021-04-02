@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:attendance_app/Screens/confirm_attendance.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
@@ -26,7 +27,7 @@ class _CamscanState extends State<Camscan> {
   bool _load = false;
 
 
-  final snackBar = SnackBar(
+  final snack = SnackBar(
     backgroundColor: Colors.white,
 
     content: Text(
@@ -184,11 +185,11 @@ class _CamscanState extends State<Camscan> {
                             print("Student id: ${student_id}");
                             setState(()=> _load = false);
                             if(student_id.length != 9){
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                              ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
                             }
                           }else{
                             setState(()=> _load = false);
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
                           }
                         });
                       },
