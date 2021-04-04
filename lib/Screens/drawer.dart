@@ -1,10 +1,13 @@
 import 'package:attendance_app/Authentication/auth.dart';
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Screens/settings.dart';
 import 'package:attendance_app/Screens/signIn.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+
+import 'excelsheet.dart';
 
 class DrawerWidget extends StatefulWidget {
   @override
@@ -38,7 +41,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
               .of(context)
               .size
               .height,
-          color: Color(0XFFFFFFFF),
+          color: bgColor,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -73,7 +76,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                                       Text(
                                         name,
                                         style: TextStyle(
-                                          color: Color(0XFFFFFFFF),
+                                          color: Colors.white,
                                           fontFamily: "Bold",
                                           fontSize: 20.0,
                                         ),
@@ -82,7 +85,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                                       Text(
                                         email,
                                         style: TextStyle(
-                                          color: Color(0XFFFFFFFF),
+                                          color: Colors.white,
                                           fontFamily: "Bold",
                                           fontSize: 12.0,
                                         ),
@@ -98,21 +101,50 @@ class DrawerWidgetState extends State<DrawerWidget> {
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context)=> ExcelSheet())
+                        );
+                      },
+                      child: Container(
+                        color: bgCardColor,
+                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
+                            Icon(Icons.date_range_outlined, color: iconColor, size: 20,),
+                            SizedBox(width: 20),
+                            Text(
+                              "Generate Attendance",
+                              style: TextStyle(
+                                color: textColor,
+                                fontFamily: "Medium",
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    //SizedBox(height: 15),
+                    Divider(color: Color(0XFFDADADA), height: 1),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context)=> Settings())
                         );
                       },
                       child: Container(
-                        color: Color(0XFFFFFFFF),
+                        color: bgCardColor,
                         padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: Row(
                           children: <Widget>[
-                            SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20),
+                            SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
                             SizedBox(width: 20),
                             Text(
                               "Settings",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: textColor,
                                 fontFamily: "Medium",
                                 fontSize: 18.0,
                               ),
@@ -133,16 +165,16 @@ class DrawerWidgetState extends State<DrawerWidget> {
                                 (route) => false);
                       },
                       child: Container(
-                        color: Color(0XFFFFFFFF),
+                        color: bgCardColor,
                         padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: Row(
                           children: <Widget>[
-                            SvgPicture.asset("assets/images/logout.svg", width: 20, height: 20),
+                            SvgPicture.asset("assets/images/logout.svg", width: 20, height: 20, color: iconColor,),
                             SizedBox(width: 20),
                             Text(
                               "Sign Out",
                               style: TextStyle(
-                                color: Colors.black,
+                                color: textColor,
                                 fontFamily: "Medium",
                                 fontSize: 18.0,
                               ),

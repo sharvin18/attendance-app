@@ -1,5 +1,6 @@
 import 'package:attendance_app/Authentication/auth.dart';
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Screens/loading.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +70,7 @@ class _SignInState extends State<SignIn> {
                       await _auth.signInWithGoogle().then((value) async {
                         if(value != null){
                           await getTeacher();
+                          appTheme(themeColor);
                           Navigator.of(context).pushAndRemoveUntil(
                             MaterialPageRoute(
                               builder: (context) => Home()),

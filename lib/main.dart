@@ -7,6 +7,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Authentication/dbdata.dart';
+import 'Helpers/constants.dart';
 import 'Screens/home.dart';
 
 List<CameraDescription> cameras = [];
@@ -20,7 +21,7 @@ Future<void> main() async {
     print(e);
   }
   await Firebase.initializeApp();
-  await getTeacher();
+  await getTeacher().then((value) => existence == true? appTheme(themeColor): null);
   loading = false;
   runApp(MyApp());
 }

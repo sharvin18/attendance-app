@@ -1,4 +1,5 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
+import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:attendance_app/Screens/loading.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,13 +20,13 @@ class ConfirmAttendance extends StatefulWidget {
 
 class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   var date = new DateFormat.yMd().format(new DateTime.now());
-  String newDate = "";
+  String storeDate="",displayDate="";
   List details = [];
   List dateFormat = [];
   List correctDate = [];
   bool _loading = false;
 
-  final snackBar = SnackBar(
+  final snack = SnackBar(
     backgroundColor: Colors.black.withOpacity(0.8),
     content: Text(
       "No Student present!",
@@ -41,23 +42,18 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
     // TODO: implement initState
     super.initState();
     details = widget.branch.split("-");
-    dateFormat = date.split("/");
-    correctDate.add(dateFormat[1]);
-    correctDate.add(dateFormat[0]);
-    correctDate.add(dateFormat[2]);
-    newDate = correctDate.join("-");
-    _loading = false;
-    print(newDate);
+    storeDate = formatDateAndMonth(date);
+    displayDate = getFormattedDate(storeDate);
   }
   @override
   Widget build(BuildContext context) {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
     return _loading ? Loading("Saving Attendance ...") :
     Scaffold(
       body: Stack(
         children: [
-          customContainer(height, width),
+          customContainer(h, w),
           Container(
             color: Colors.transparent,
             child: Column(
@@ -66,6 +62,8 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                   preferredSize: Size.fromHeight(60),
                   child: SafeArea(
                     child: Container(
+                      height: 60,
+                      width: w,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Row(
@@ -89,13 +87,13 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                   onPressed: () async {
                                     if(widget.attendance.length > 0){
                                       setState(()=> _loading = true);
-                                      await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], newDate);
+                                      await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], widget.subject, storeDate);
                                       Navigator.pushAndRemoveUntil(
                                           context,
                                           MaterialPageRoute(builder: (context)=>Home()),
                                               (route) => false);
                                     }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                                      ScaffoldMessenger.of(context).showSnackBar(snackBar("No Student present!", true));
                                     }
 
                                   }
@@ -107,12 +105,35 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                     ),
                   ),
                 ),
-                SizedBox(height: 28.0,),
+                SizedBox(height: 20.0,),
                 Container(
-                  height: height - 105,
+                  height: 20.0,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 40.0),
+                        child: Text(
+                          displayDate,
+                          style: TextStyle(
+                            fontFamily: "Medium",
+                            fontSize: 20.0,
+                            color: textColor,
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ),
+                SizedBox(height: 15.0,),
+                Container(
+                  //height: h - 115,
+                  //height: h - 105,
+                  height: h - 139,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(40.0)),
-                    color: Colors.white,
+                    color:bgColor,
                   ),
                   child: SingleChildScrollView(
                     child: Padding(
@@ -156,6 +177,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                           style: TextStyle(
                                             fontFamily: "Medium",
                                             fontSize: 20.0,
+                                            color: textColor,
                                           ),
                                         ),
                                       ),
@@ -184,6 +206,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                                               fontFamily: "Regular",
                                                               fontWeight: FontWeight.w500,
                                                               fontSize: 20.0,
+                                                              color: textColor,
                                                             ),
                                                           ),
                                                           Text(
@@ -192,6 +215,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                                             fontFamily: "Regular",
                                                             fontWeight: FontWeight.w500,
                                                             fontSize: 20.0,
+                                                            color: textColor,
                                                             ),
                                                           )
                                                         ],
@@ -200,12 +224,13 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                                         style: TextStyle(
                                                           fontFamily: "Regular",
                                                           fontSize: 20.0,
+                                                          color: textColor,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
                                                   SizedBox(height: 5.0,),
-                                                  Divider(height: 30),
+                                                  Divider(height: 30, color: dividerColor,),
                                                 ],
                                               ): Container();
                                             }),
