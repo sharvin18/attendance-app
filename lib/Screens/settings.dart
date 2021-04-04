@@ -31,7 +31,7 @@ class _SettingsState extends State<Settings> {
           'Settings',
           style: TextStyle(
             color:textColor,
-            fontWeight: FontWeight.bold,
+            fontFamily: "Medium",
           ),
         ),
         leading: IconButton(

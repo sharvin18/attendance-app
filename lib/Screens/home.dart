@@ -43,7 +43,6 @@ class _HomeState extends State<Home> {
                     child: Container(
                       height: 60,
                       width: w,
-                      color: themeColor == "dark" ? bgCardColor : Colors.transparent,
                       child: Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10.0),

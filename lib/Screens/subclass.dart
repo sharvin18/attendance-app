@@ -51,7 +51,6 @@ class _SubClassState extends State<SubClass> {
                       child: Container(
                         height: 60,
                         width: w,
-                        //color: themeColor == "dark" ? bgCardColor : Colors.transparent,
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12.0),
                           child: Row(

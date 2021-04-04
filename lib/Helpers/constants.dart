@@ -34,22 +34,19 @@ var orange2 = Colors.orange[200];
 
 var flourescentPurple1 = Color(0XFF8A2BE2);
 var flourescentPurple2 = Color(0XFFE936A7);
-//var flourescentPurple2 = Color(0XFFE92EFB);
 var purple1 = Colors.purple[500];
 var purple2 = Colors.purple[200];
 
 appTheme(String themeType){
 
-	// Color(0XFFFFFFFF) White
 	if(themeType == "dark"){
-		print("It's dark");
 
 		textColor = Color(0XFFffffff);   // white text
 		//bgColor = Color(0XFF363534);
-		bgColor = Color(0XFF000000);  // perfect black color    black bg
+		bgColor = Color(0XFF000000);  // perfect black color
 		//bgColor = Color(0XFF212121);
 		iconColor = Color(0XFFffffff);  //white icon
-		bgCardColor = Color(0XFF2d2e2d);  // to be changed  // black shade bg
+		bgCardColor = Color(0XFF2d2e2d);  // black shade bg
 		textSnack = Color(0XFF000000);
 		bgSnack = Color(0XFFffffff);
 		dividerColor = Colors.grey;
@@ -64,9 +61,8 @@ appTheme(String themeType){
 		card4Light = flourescentPurple1;
 
 	}else{
-		print("It's white");
-		textColor = Color(0XFF000000);  // perfect black color   black text
-		//textColor = Color(0XFF292828);  // black text
+
+		textColor = Color(0XFF000000);  // perfect black color
 		bgColor = Color(0XFFffffff);    // white bg
 		iconColor = Color(0XFF292828);  // black Icon
 		bgCardColor = Color(0XFFffffff);  // card white bg

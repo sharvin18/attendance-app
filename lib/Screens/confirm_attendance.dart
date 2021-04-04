@@ -64,7 +64,6 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                     child: Container(
                       height: 60,
                       width: w,
-                      //color: themeColor == "dark" ? bgCardColor : Colors.transparent,
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Row(
@@ -114,7 +113,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(left: 25.0),
+                        padding: const EdgeInsets.only(right: 40.0),
                         child: Text(
                           displayDate,
                           style: TextStyle(

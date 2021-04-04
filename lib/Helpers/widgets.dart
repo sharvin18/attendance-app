@@ -1,5 +1,7 @@
+import 'package:attendance_app/Authentication/dbdata.dart';
 import 'package:flutter/material.dart';
 import 'package:attendance_app/Helpers/constants.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 Container customContainer(double h, double w){
   return Container(
@@ -9,6 +11,41 @@ Container customContainer(double h, double w){
       gradient: LinearGradient(colors: [
       Color(0xFF3a5af9), Color(0xFF7449fa),],
       stops:[0.0, 0.8],
+      ),
+    ),
+  );
+}
+
+Container loadingContainer(String text){
+  return Container(
+    height: 116,
+    width: 288,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(20.0),
+      color: themeColor == "dark" ? Colors.white : Color(0XFF2d2e2d),
+    ),
+    child: Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Column(
+        children: [
+          Text(
+            text,
+            style: TextStyle(
+              fontFamily: "Medium",
+              fontSize: 20.0,
+              color: themeColor == "dark"? Colors.black: Colors.white,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0.0, 12.0, 25.0,0.0),
+                child: SpinKitFadingCircle(color: Colors.deepPurple.shade300, size: 40,),
+              ),
+            ],
+          )
+        ],
       ),
     ),
   );
