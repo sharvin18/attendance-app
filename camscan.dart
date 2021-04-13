@@ -1,29 +1,51 @@
 import 'dart:io';
-
+import 'dart:async';
+import 'package:attendance_app/Screens/confirm_attendance.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-
 import '../main.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
 
 class Camscan extends StatefulWidget {
   final List id ;
-  Camscan(this.id);
+  final String branch;
+  final String subject;
+  final List present_id;
+  Camscan(this.id, this.branch, this.subject,this.present_id);
 
   @override
   _CamscanState createState() => _CamscanState();
 }
 
+
 class _CamscanState extends State<Camscan> {
   CameraController _controller;
+  Timer timer;
   File imageFile;
-  List present_id;
+  bool _load = false;
+  bool tick = false;
+  static const twoSec = const Duration(seconds: 2);
 
 
-  Future scan(String imgpath) async{
+  final snackBar = SnackBar(
+    backgroundColor: Colors.white,
+
+    content: Text(
+      "Couldn\'t scan the ID, Try Again.",
+      style: TextStyle(
+        fontFamily: "Medium",
+        color: Colors.black,
+      ),
+    ),
+    duration: Duration(seconds: 2),
+  );
+
+  Future<String> scan(String imgpath) async{
     final File imageFile = File(imgpath);
 
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imageFile);
@@ -32,20 +54,19 @@ class _CamscanState extends State<Camscan> {
 
     final VisionText visionText = await textRecognizer.processImage(visionImage);
 
-    //String pattern = r"^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)$";
-    //String pattern2 = r".:";
-    //RegExp regEx = RegExp(pattern);
-
     String id = "";
 
     for (TextBlock block in visionText.blocks) {
       for (TextLine line in block.lines) {
         // Checking if the line contains an email address
-        if (line.text.toString().contains("ID No.:")) {
+        print(line.text.toString());
+        if (line.text.toString().contains("No.:")) {
           List idno = line.text.toString().split(" ");
           if (widget.id.contains(idno[idno.length-1])){
-            id += line.text;
-            present_id.add(idno[idno.length - 1]);
+            if(!widget.present_id.contains(idno[idno.length - 1])){
+              widget.present_id.add(idno[idno.length - 1]);
+            }
+            id = idno[idno.length - 1];
             break;
           }
           else{
@@ -55,7 +76,7 @@ class _CamscanState extends State<Camscan> {
         }
       }
     }
-    print(id);
+    return id;
   }
 
   Future<String> _takePicture() async {
@@ -106,8 +127,6 @@ class _CamscanState extends State<Camscan> {
   @override
   void initState() {
     super.initState();
-    present_id = [];
-
     _controller = CameraController(cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
       if (!mounted) {
@@ -115,45 +134,163 @@ class _CamscanState extends State<Camscan> {
       }
       setState(() {});
     });
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => trial());
   }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
+  trial() async{
+    setState(()=> tick = false);
+    print("Reached Timer");
+    setState(()=> _load = true);
+    await _takePicture().then((String path) async  {
+      print("Taken Picture");
+      if (path != null) {
+        print("Clicked");
+        String student_id = await scan(path);
+        print("Student id: ${student_id}");
+        setState(()=> _load = false);
+
+        if(student_id.length != 9 && student_id != ""){
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+        else if(student_id.length == 9 && student_id != ""){
+          setState(()=> tick = true);
+        }
+      }else{
+        setState(()=> _load = false);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+
+    });
+  }
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el.markNeedsBuild();
+      el.visitChildren(rebuild);
+    }
+    (context as Element).visitChildren(rebuild);
+  }
+
   @override
   Widget build(BuildContext context) {
+    rebuildAllChildren(context);
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text('CamScan'),
-      ),
+      key: _scaffoldKey,
       body: _controller.value.isInitialized
           ? Stack(
         children: <Widget>[
           CameraPreview(_controller),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
+          Align(
+            alignment: Alignment.bottomCenter,
             child: Container(
-              alignment: Alignment.bottomCenter,
-              child: RaisedButton.icon(
-                icon: Icon(Icons.camera),
-                label: Text("Click"),
-                onPressed: () async {
-                  await _takePicture().then((String path) async  {
-                    if (path != null) {
-                      await scan(path) ;
-                    }
-                  });
-                },
+              color: Colors.black.withOpacity(0.6),
+              height: height * 0.18,
+              width: width,
+              child: Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: (){
+                        timer.cancel();
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.red,
+                        ),
+                        child: Icon(Icons.clear, color: Colors.white, size: 40,),
+                      ),
+                     ),
+                    // GestureDetector(
+                    //   onTap: () async {
+                    //     setState(()=> _load = true);
+                    //     await _takePicture().then((String path) async  {
+                    //       if (path != null) {
+                    //         print("Clicked");
+                    //         String student_id = await scan(path);
+                    //         print("Student id: ${student_id}");
+                    //         setState(()=> _load = false);
+                    //         if(student_id.length != 9){
+                    //           ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    //         }
+                    //       }else{
+                    //         setState(()=> _load = false);
+                    //         ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    //       }
+                    //     });
+                    //   },
+                    //   child: Container(
+                    //     height: 75,
+                    //     width: 75,
+                    //     decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(80),
+                    //       color: Colors.grey[300],
+                    //     ),
+                    //     child: Icon(Icons.camera, color: Colors.black,size: 50,),
+                    //   ),
+                    // ),
+                    GestureDetector(
+                      onTap: (){
+                        timer.cancel();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.present_id, widget.branch, widget.subject,widget.id)));
+                      },
+                      child: Container(
+                        height: 60,
+                        width: 60,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          color: Colors.green,
+                        ),
+                        child: Icon(Icons.arrow_forward_ios_sharp, color: Colors.white, size: 35,),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          )
+          ),
+          _load ? Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: Center(
+              child: SpinKitFadingCircle(
+                color: Colors.blue[600],
+                size: 60.0,
+              ),
+            ),
+          ) : Container(),
+          tick ? Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: Center(
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.green,
+                ),
+                child: Icon(Icons.done_sharp, color: Colors.white, size: 20,),
+              ),
+            ),
+          ) : Container()
         ],
       )
           : Container(
-        color: Colors.black,
+        color: Colors.transparent,
         child: Center(
           child: CircularProgressIndicator(),
         ),
