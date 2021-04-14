@@ -18,9 +18,13 @@ var card4Light;
 var dividerColor;
 
 var flourescentBlue1 = Color(0XFF00C2BA);
+//var flourescentBlue1 = Color(0XFF189CC4);
 var flourescentBlue2 = Color(0XFF79FFFE);
-var blue1 = Colors.blue[500];
+// var blue1 = Colors.blue[500];
+var blue1 = Color(0XFF189CC4);
 var blue2 = Colors.blue[200];
+
+
 
 var flourescentGreen1 = Color(0XFF7FFF00);
 var flourescentGreen2 = Color(0XFFB8FB3C);
@@ -37,6 +41,8 @@ var flourescentPurple2 = Color(0XFFE936A7);
 var purple1 = Colors.purple[500];
 var purple2 = Colors.purple[200];
 
+var yellow1 = Color(0XFFFFFF14);
+var yellow2 = Color(0XFFFFFF76);
 appTheme(String themeType){
 
 	if(themeType == "dark"){
@@ -77,8 +83,8 @@ appTheme(String themeType){
 		card2Light = green2;
 		card3Dark = orange1;
 		card3Light = orange2;
-		card4Dark = purple1;
-		card4Light = purple1;
+		card4Dark = yellow1;
+		card4Light = yellow2;
 	}
 }
 

@@ -14,8 +14,8 @@ Future<void> addTeacher(String uid, String name, String email, String profileimg
     'email': email,
     'profileimg': profileimg,
     'theme': "white",
-    'subjects': ["AOA", "SBL", "DBMS", "EM-IV"],
-    'year': ["SE-COMPS", "SE-COMPS", "SE-COMPS", "SE-IT"],
+    'subjects': [],
+    'year': [],
   });
 }
 
@@ -116,4 +116,37 @@ Future<List> getDates(String year, String branch, String sub, var startDate, var
   lecDetails.add(dates);
   lecDetails.add(lecs);
   return lecDetails;
+}
+
+Future<List> getSubjects(String br, String yr) async {
+  List subs = [];
+  final List<DocumentSnapshot> documents = (await FirebaseFirestore.instance
+                      .collection(br)
+                        .where("year", isEqualTo: yr)
+                        .get()).docs;
+  documents.forEach((element) {
+    subs = element.data()['subjects'];
+  });
+
+  return subs;
+}
+
+Future updateSubject(List sub, List yr) async {
+  await FirebaseFirestore.instance
+      .collection("teachers")
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .update({
+    'subjects': sub,
+    'year': yr,
+  });
+
+  return await FirebaseFirestore.instance
+      .collection('teachers')
+      .doc(FirebaseAuth.instance.currentUser.uid)
+      .get()
+      .then((value) {
+    subjects = value.get('subjects');
+    year = value.get('year');
+  });
+
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:attendance_app/Screens/confirm_attendance.dart';
@@ -14,31 +15,22 @@ class Camscan extends StatefulWidget {
   final List id ;
   final String branch;
   final String subject;
-  Camscan(this.id, this.branch, this.subject);
+  final List present_id;
+  Camscan(this.id, this.branch, this.subject,this.present_id);
 
   @override
   _CamscanState createState() => _CamscanState();
 }
 
+
 class _CamscanState extends State<Camscan> {
+
   CameraController _controller;
+  Timer timer;
   File imageFile;
-  List present_id;
   bool _load = false;
-
-
-  final snack = SnackBar(
-    backgroundColor: Colors.white,
-
-    content: Text(
-      "Couldn\'t scan the ID, Try Again.",
-      style: TextStyle(
-        fontFamily: "Medium",
-        color: Colors.black,
-      ),
-    ),
-    duration: Duration(seconds: 2),
-  );
+  bool tick = false;
+  static const twoSec = const Duration(seconds: 2);
 
   Future<String> scan(String imgpath) async{
     final File imageFile = File(imgpath);
@@ -58,11 +50,10 @@ class _CamscanState extends State<Camscan> {
         if (line.text.toString().contains("No.:")) {
           List idno = line.text.toString().split(" ");
           if (widget.id.contains(idno[idno.length-1])){
-            print(idno[idno.length - 1]);
+            if(!widget.present_id.contains(idno[idno.length - 1])){
+              widget.present_id.add(idno[idno.length - 1]);
+            }
             id = idno[idno.length - 1];
-            present_id.add(idno[idno.length - 1]);
-            print(present_id.toString());
-
             break;
           }
           else{
@@ -123,8 +114,6 @@ class _CamscanState extends State<Camscan> {
   @override
   void initState() {
     super.initState();
-    present_id = [];
-
     _controller = CameraController(cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
       if (!mounted) {
@@ -132,12 +121,38 @@ class _CamscanState extends State<Camscan> {
       }
       setState(() {});
     });
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => trial());
   }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  trial() async{
+    setState(()=> tick = false);
+    print("Reached Timer");
+    setState(()=> _load = true);
+    await _takePicture().then((String path) async  {
+      print("Taken Picture");
+      if (path != null) {
+        print("Clicked");
+        String student_id = await scan(path);
+        print("Student id: ${student_id}");
+        setState(()=> _load = false);
+
+        if(student_id.length != 9 && student_id != ""){
+          ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
+        }
+        else if(student_id.length == 9 && student_id != ""){
+          setState(()=> tick = true);
+        }
+      }else{
+        setState(()=> _load = false);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
+      }
+
+    });
   }
 
   @override
@@ -163,6 +178,7 @@ class _CamscanState extends State<Camscan> {
                   children: [
                     GestureDetector(
                       onTap: (){
+                        timer.cancel();
                         Navigator.of(context).pop();
                       },
                       child: Container(
@@ -175,37 +191,11 @@ class _CamscanState extends State<Camscan> {
                         child: Icon(Icons.clear, color: Colors.white, size: 40,),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () async {
-                        setState(()=> _load = true);
-                        await _takePicture().then((String path) async  {
-                          if (path != null) {
-                            print("Clicked");
-                            String student_id = await scan(path);
-                            print("Student id: ${student_id}");
-                            setState(()=> _load = false);
-                            if(student_id.length != 9){
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
-                            }
-                          }else{
-                            setState(()=> _load = false);
-                            ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
-                          }
-                        });
-                      },
-                      child: Container(
-                        height: 75,
-                        width: 75,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(80),
-                          color: Colors.grey[300],
-                        ),
-                        child: Icon(Icons.camera, color: Colors.black,size: 50,),
-                      ),
-                    ),
+
                     GestureDetector(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(present_id, widget.branch, widget.subject)));
+                        timer.cancel();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.present_id, widget.branch, widget.subject,widget.id)));
                       },
                       child: Container(
                         height: 60,
@@ -232,6 +222,22 @@ class _CamscanState extends State<Camscan> {
                 size: 60.0,
               ),
             ),
+          ) : Container(),
+          tick ? Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: Center(
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.green,
+                ),
+                child: Icon(Icons.done_sharp, color: Colors.white, size: 20,),
+              ),
+            ),
           ) : Container()
         ],
       )
@@ -242,7 +248,5 @@ class _CamscanState extends State<Camscan> {
         ),
       ),
     );
-
   }
-
 }

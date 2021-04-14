@@ -177,7 +177,8 @@ class _ExcelSheetstate extends State<ExcelSheet> {
           },
         ),
       ),
-      body: Stack(children: [
+      body: Stack(
+          children: [
         Container(
           height: h,
           width: w,
@@ -196,8 +197,9 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                         "Select Subject",
                         style: TextStyle(
                             fontSize: 20.0,
-                            fontWeight: FontWeight.w900,
-                            color: textColor),
+                            fontFamily: "Medium",
+                            color: textColor
+                        ),
                       ),
                     ),
                   ],
