@@ -1,6 +1,7 @@
 import 'package:attendance_app/Authentication/dbdata.dart';
 import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Helpers/widgets.dart';
+import 'package:attendance_app/Screens/addSubjects.dart';
 import 'package:attendance_app/Screens/subclass.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,7 @@ class _HomeState extends State<Home> {
                               Row(
                                 children: [
                                   IconButton(
-                                    icon: Icon(Icons.menu_rounded, color: iconColor, size: 28.0,),
+                                    icon: Icon(Icons.menu_rounded, color: Colors.white, size: 28.0,),
                                     onPressed: (){
                                       _scaffoldKey.currentState.openDrawer();
                                     }
@@ -64,7 +65,7 @@ class _HomeState extends State<Home> {
                                         style: TextStyle(
                                             fontFamily: "Medium",
                                             fontSize: 24.0,
-                                            color: textColor,
+                                            color: Colors.white,
                                         )
                                     ),
                                   ),
@@ -73,8 +74,13 @@ class _HomeState extends State<Home> {
                               Padding(
                                 padding: const EdgeInsets.only(top:5.0),
                                 child: IconButton(
-                                  icon: Icon(Icons.notifications_none_sharp, color: iconColor, size: 28),
-                                  onPressed: (){}
+                                  icon: Icon(Icons.add, color: Colors.white, size: 28),
+                                  onPressed: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => AddSubjects())
+                                    );
+                                  }
                                 ),
                               )
                             ],
@@ -92,7 +98,7 @@ class _HomeState extends State<Home> {
                       style: TextStyle(
                         fontFamily: "Bold",
                         fontSize: 20.0,
-                        color:textColor,
+                        color:Colors.white,
                       )
                   ),
                 ),
@@ -112,13 +118,26 @@ class _HomeState extends State<Home> {
                         children: [
                           subjects.length == 0
                               ? Center(
-                            child: Text(
-                              'No Subjects Assigned',
-                              style: TextStyle(
-                                fontFamily: "Bold",
-                                fontSize: 20.0,
-                                color: textColor,
-                              ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'No Subjects Assigned',
+                                  style: TextStyle(
+                                    fontFamily: "Bold",
+                                    fontSize: 20.0,
+                                    color: textColor,
+                                  ),
+                                ),
+                                SizedBox(height: 8.0,),
+                                Text(
+                                  'Please add your subjects from the MY SUBJECTS section',
+                                  style: TextStyle(
+                                    fontFamily: "Medium",
+                                    fontSize: 18.0,
+                                    color: textColor,
+                                  ),
+                                ),
+                              ],
                             ),
                           )
                               : ListView.builder(
@@ -143,10 +162,10 @@ class _HomeState extends State<Home> {
                                         decoration: BoxDecoration(
                                           gradient: LinearGradient(
                                             colors: index%4==0? [card1Dark, card1Light]
-                                                : index%4==1?[card2Dark, card2Light]
-                                                : index%4==2?[card3Dark, card3Light]
-                                                : [card4Dark, card4Light],
-                                            stops:[0.0, 0.8],
+                                                : index%4==1?[card4Dark, card4Light]
+                                                : index%4==2?[card1Dark, card1Light]
+                                                : [card1Dark, card1Light],
+                                            stops:[0.0, 0.7],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),

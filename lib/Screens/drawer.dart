@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'excelsheet.dart';
+import 'mySubjects.dart';
 
 class DrawerWidget extends StatefulWidget {
   @override
@@ -115,6 +116,35 @@ class DrawerWidgetState extends State<DrawerWidget> {
                             SizedBox(width: 20),
                             Text(
                               "Generate Attendance",
+                              style: TextStyle(
+                                color: textColor,
+                                fontFamily: "Medium",
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    //SizedBox(height: 15),
+                    Divider(color: Color(0XFFDADADA), height: 1),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context)=> MySubjects())
+                        );
+                      },
+                      child: Container(
+                        color: bgCardColor,
+                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
+                            Icon(Icons.update, color: iconColor, size: 20,),
+                            SizedBox(width: 20),
+                            Text(
+                              "My Subjects",
                               style: TextStyle(
                                 color: textColor,
                                 fontFamily: "Medium",

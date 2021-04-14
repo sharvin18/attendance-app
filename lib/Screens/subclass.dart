@@ -85,7 +85,7 @@ class _SubClassState extends State<SubClass> {
                                     onPressed: () => Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => Camscan(ids, widget.course, widget.subject),
+                                        builder: (context) => Camscan(ids, widget.course, widget.subject, []),
                                       ),
                                     )
                                 ),
