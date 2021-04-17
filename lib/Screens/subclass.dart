@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'camscan.dart';
 
 class SubClass extends StatefulWidget {
@@ -217,39 +217,44 @@ class _SubClassState extends State<SubClass> {
                                             DocumentSnapshot studentlist = snapshot.data.docs[index];
                                             ids.add(studentlist.data()['id']);
 
-                                            return Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Text(
-                                                      "${studentlist.data()['roll']}. ",
-                                                      style: TextStyle(
-                                                        fontFamily: "Regular",
-                                                        fontWeight: FontWeight.w500,
-                                                        fontSize: 18.0,
-                                                        color: textColor,
+                                            return GestureDetector(
+                                              onLongPress: (){
+                                                launch("tel:" + studentlist.data()['phone'].toString());
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        "${studentlist.data()['roll']}. ",
+                                                        style: TextStyle(
+                                                          fontFamily: "Regular",
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 18.0,
+                                                          color: textColor,
+                                                        ),
                                                       ),
+                                                      Text(
+                                                        studentlist.data()['name'],
+                                                        style: TextStyle(
+                                                          fontFamily: "Regular",
+                                                          fontWeight: FontWeight.w500,
+                                                          fontSize: 20.0,
+                                                          color: textColor,
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),Text(
+                                                    studentlist.data()['id'],
+                                                    style: TextStyle(
+                                                      fontFamily: "Regular",
+                                                      fontSize: 20.0,
+                                                      color: textColor,
                                                     ),
-                                                    Text(
-                                                      studentlist.data()['name'],
-                                                      style: TextStyle(
-                                                        fontFamily: "Regular",
-                                                        fontWeight: FontWeight.w500,
-                                                        fontSize: 20.0,
-                                                        color: textColor,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),Text(
-                                                  studentlist.data()['id'],
-                                                  style: TextStyle(
-                                                    fontFamily: "Regular",
-                                                    fontSize: 20.0,
-                                                    color: textColor,
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             );
                                           }),
                                     ),

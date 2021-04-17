@@ -2,9 +2,6 @@ import 'package:attendance_app/Authentication/dbdata.dart';
 import 'package:attendance_app/Helpers/constants.dart';
 import 'package:attendance_app/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:gradient_text/gradient_text.dart';
-import 'package:intl/intl.dart';
-
 import 'home.dart';
 import 'loading.dart';
 
@@ -36,21 +33,21 @@ class add_subject extends State<AddSubjects>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    // deptisSelected = _department[0];
-    // yearisSelected = _year[0];
-    // subjectIsSelected = _subjects[0];
   }
 
-  timepass(){}
+ getDropDownSubjects(String dept, String yr) async {
+   if(selectedDept != "Select a department" && selectedYear != "Select a year") {
+     subs = [];
+     subs = await getSubjects(selectedDept.toLowerCase(), selectedYear.toUpperCase());
+     subs.insert(0, 'Select a subject');
+     print(subs);
+     selectedSub = "Select a subject";
+     setState(() => flag = true);
 
-  Future<void> rebuildAllChildren(BuildContext context) {
-    void rebuild(Element el) {
-      el.markNeedsBuild();
-      el.visitChildren(rebuild);
-    }
-    (context as Element).visitChildren(rebuild);
-    return null;
-  }
+   }else{
+     setState(() => flag = false);
+   }
+ }
 
   @override
   Widget build(BuildContext context) {
@@ -119,9 +116,10 @@ class add_subject extends State<AddSubjects>{
                             ),
                           );
                         }).toList(),
-                        onChanged: (String newValueSelected) {
+                        onChanged: (String newValueSelected) async {
                           setState(() {
                             this.selectedDept = newValueSelected;
+                            getDropDownSubjects(selectedDept, selectedYear);
                           });
                         },
                         value: selectedDept,
@@ -164,38 +162,28 @@ class add_subject extends State<AddSubjects>{
                         onChanged: (String newValueSelected) async {
                           setState(() {
                             this.selectedYear = newValueSelected;
+                            getDropDownSubjects(selectedDept, selectedYear);
                           });
-                          if(counter == "Add" && selectedDept != "Select a department" && selectedYear != "Select a year") {
-                            subs = await getSubjects(selectedDept.toLowerCase(), selectedYear.toUpperCase());
-                            subs.insert(0, 'Select a subject');
-                            print(subs);
-                            selectedSub = "Select a subject";
-                            // await rebuildAllChildren(context);
-                            // await rebuildAllChildren(context);
-                            // timepass();
-                            // print("Rebuild successfull");
-                          }
+
                         },
                         value: selectedYear,
                       ),
                     ),
                   ),
-
-
                   SizedBox(height: 25.0,),
                   // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.start,
+                  //   mainAxisAlignment: MainAxisAlignment.end,
                   //   children: [
                   //     Padding(
-                  //       padding: const EdgeInsets.only(left: 15.0),
+                  //       padding: const EdgeInsets.only(right: 20.0),
                   //       child: GestureDetector(
-                  //         onTap: (){
-                  //
+                  //         onTap: () async {
+                  //           await getDropDownSubjects(selectedDept, selectedYear);
                   //         },
                   //         child: Text(
                   //           'Get Subjects',
                   //           style: TextStyle(
-                  //             fontFamily: "Medium",
+                  //             fontFamily: "Bold",
                   //             color: Colors.blue,
                   //             fontSize: 18
                   //           )
@@ -204,8 +192,8 @@ class add_subject extends State<AddSubjects>{
                   //     ),
                   //   ],
                   // ),
-                  SizedBox(height: 25.0,),
-                  flag? InputDecorator(
+                  // SizedBox(height: 30.0,),
+                  flag ? InputDecorator(
                     decoration: InputDecoration(
                     labelText: 'Subject',
                     labelStyle: TextStyle(
@@ -246,46 +234,26 @@ class add_subject extends State<AddSubjects>{
                         value: selectedSub,
                       ),
                     ),
-                  ): Container(),
+                  ):Container(),
                   SizedBox(height: 50.0,),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: ElevatedButton(
                         onPressed: () async {
-                          if(counter == "Get"){
-                            if(selectedDept != "Select a department" && selectedYear != "Select a year"){
-                              subs = await getSubjects(selectedDept.toLowerCase(), selectedYear.toUpperCase());
-                              subs.insert(0, 'Select a subject');
-                              print(subs);
-                              selectedSub = "Select a subject";
-                              await rebuildAllChildren(context);
-                              await rebuildAllChildren(context);
-                              timepass();
-                              print("Rebuild successfull");
-                              setState(() {
-                                flag = true;
-                                counter = "Add";
-                              });
-                            }else{
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar("Please select the appropriate fields", false));
-                            }
 
+                          if(selectedDept != "Select a department" && selectedYear != "Select a year" && selectedSub != "Select a subject"){
+                            setState(() => _updating = true);
+                            subjects.add(selectedSub.toUpperCase());
+                            year.add(selectedYear.toUpperCase()+"-"+selectedDept.toUpperCase());
+                            await updateSubject(subjects, year);
+                            setState(() => _updating = false);
+                            Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                                    (route) => false);
                           }else{
-                            if(selectedDept != "Select a department" && selectedYear != "Select a year" && selectedSub != "Select a subject"){
-                              setState(() => _updating = true);
-                              subjects.add(selectedSub.toUpperCase());
-                              year.add(selectedYear.toUpperCase()+"-"+selectedDept.toUpperCase());
-                              await updateSubject(subjects, year);
-                              setState(() => _updating = false);
-                              Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Home()),
-                                      (route) => false);
-                            }else{
-                              ScaffoldMessenger.of(context).showSnackBar(snackBar("Please select the valid data", false));
-                            }
+                            ScaffoldMessenger.of(context).showSnackBar(snackBar("Please select the valid data", false));
                           }
-
                         },
                         style: ElevatedButton.styleFrom(
                           padding: EdgeInsets.all(0.0),
@@ -308,7 +276,7 @@ class add_subject extends State<AddSubjects>{
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
                               child: Text(
-                                "${counter} Subject",
+                                "Add Subject",
                                 style: TextStyle(fontSize: 18, fontFamily: "Bold"),
                                 textAlign: TextAlign.center,
                               ),

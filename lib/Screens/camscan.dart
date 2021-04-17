@@ -146,6 +146,11 @@ class _CamscanState extends State<Camscan> {
         }
         else if(student_id.length == 9 && student_id != ""){
           setState(()=> tick = true);
+          new Future.delayed(new Duration(seconds: 1), () {
+            setState(() {
+              tick = false;
+            });
+          });
         }
       }else{
         setState(()=> _load = false);
@@ -153,6 +158,7 @@ class _CamscanState extends State<Camscan> {
       }
 
     });
+
   }
 
   @override
