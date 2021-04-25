@@ -13,7 +13,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  bool hi = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -107,6 +107,7 @@ class _HomeState extends State<Home> {
                   //height: h - 153,
                   //height: height - 165,
                   height: h - 177,
+                  width: w,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(40.0)),
                     color: bgColor,
@@ -117,29 +118,22 @@ class _HomeState extends State<Home> {
                       child: Column(
                         children: [
                           subjects.length == 0
-                              ? Center(
-                            child: Column(
-                              children: [
-                                Text(
-                                  'No Subjects Assigned',
-                                  style: TextStyle(
-                                    fontFamily: "Bold",
-                                    fontSize: 20.0,
-                                    color: textColor,
-                                  ),
+                              ? Padding(
+                                padding: const EdgeInsets.only(top:80),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'No Subjects Assigned',
+                                        style: TextStyle(
+                                          fontFamily: "Bold",
+                                          fontSize: 20.0,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                    ],
                                 ),
-                                SizedBox(height: 8.0,),
-                                Text(
-                                  'Please add your subjects from the MY SUBJECTS section',
-                                  style: TextStyle(
-                                    fontFamily: "Medium",
-                                    fontSize: 18.0,
-                                    color: textColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                              )
                               : ListView.builder(
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
@@ -162,10 +156,10 @@ class _HomeState extends State<Home> {
                                         decoration: BoxDecoration(
                                           gradient: LinearGradient(
                                             colors: index%4==0? [card1Dark, card1Light]
-                                                : index%4==1?[card4Dark, card4Light]
-                                                : index%4==2?[card1Dark, card1Light]
-                                                : [card1Dark, card1Light],
-                                            stops:[0.0, 0.7],
+                                                : index%4==1?[card2Dark, card2Light]
+                                                : index%4==2?[card3Dark, card3Light]
+                                                : [card4Dark, card4Light],
+                                            stops:[0.0, 0.6],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
