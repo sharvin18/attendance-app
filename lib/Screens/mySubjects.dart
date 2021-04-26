@@ -45,10 +45,8 @@ class _MySubjectsState extends State<MySubjects> {
         ),
       ),
       onPressed:  () async {
-        setState(() => del = true);
         subjects.remove(subjects[ind]);
         year.remove(year[ind]);
-        setState(() => del = false);
         await updateSubject(subjects,year);
         Navigator.of(context).pop();
         ScaffoldMessenger.of(context).showSnackBar(snackBar("Subject Removed Successfully", true));
@@ -62,7 +60,7 @@ class _MySubjectsState extends State<MySubjects> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       title: Text("Remove Subject"),
-      content: Text("Are you sure you want to remove this subject?"),
+      content: Text("Are you sure you want to remove this subject?", style: TextStyle(fontFamily: "Medium")),
       actions:[
         cancelButton,
         continueButton,
@@ -162,14 +160,6 @@ class _MySubjectsState extends State<MySubjects> {
               ),
             ),
           ),
-          del ? Container(
-            height: h,
-            width: w,
-            color: Colors.transparent,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          ) : Container(),
         ]
       ),
     );

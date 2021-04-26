@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import '../main.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'subclass.dart';
 
 class Camscan extends StatefulWidget {
   final List id ;
@@ -185,7 +186,10 @@ class _CamscanState extends State<Camscan> {
                     GestureDetector(
                       onTap: (){
                         timer.cancel();
-                        Navigator.of(context).pop();
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(builder: (context) => SubClass(widget.branch, widget.subject)),
+                            (route) => false);
                       },
                       child: Container(
                         height: 60,

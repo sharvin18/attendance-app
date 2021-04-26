@@ -22,7 +22,7 @@ class ConfirmAttendance extends StatefulWidget {
 
 class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   var date = new DateFormat.yMd().format(new DateTime.now());
-  String storeDate="",displayDate="";
+  String storeDate="",displayDate="", strength="";
   List details = [];
   List dateFormat = [];
   List correctDate = [];
@@ -43,10 +43,18 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    getStrength();
     details = widget.branch.split("-");
     storeDate = formatDateAndMonth(date);
     displayDate = getFormattedDate(storeDate);
   }
+
+  getStrength(){
+    int totalPresent = widget.attendance.length;
+    int totalStrength = widget.total_id.length;
+    strength = totalPresent.toString() + "/" + totalStrength.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
@@ -123,8 +131,19 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                     height: 20.0,
                     width: MediaQuery.of(context).size.width,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 30.0),
+                          child: Text(
+                            strength,
+                            style: TextStyle(
+                              fontFamily: "Medium",
+                              fontSize: 20.0,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(right: 40.0),
                           child: Text(
@@ -132,7 +151,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                             style: TextStyle(
                               fontFamily: "Medium",
                               fontSize: 20.0,
-                              color: textColor,
+                              color: Colors.white,
                             ),
                           ),
                         )
@@ -150,7 +169,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                     ),
                     child: SingleChildScrollView(
                       child: Padding(
-                        padding: const EdgeInsets.only(left:16.0, right:20.0),
+                        padding: const EdgeInsets.only(left:10.0, right:15.0),
                         child: Column(
                           children: [
                             StreamBuilder<QuerySnapshot>(
@@ -195,7 +214,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                           ),
                                         ),
                                       ) : Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
                                         child: Container(
                                           child: ListView.builder(
                                               physics: NeverScrollableScrollPhysics(),

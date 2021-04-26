@@ -171,28 +171,6 @@ class add_subject extends State<AddSubjects>{
                     ),
                   ),
                   SizedBox(height: 25.0,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: [
-                  //     Padding(
-                  //       padding: const EdgeInsets.only(right: 20.0),
-                  //       child: GestureDetector(
-                  //         onTap: () async {
-                  //           await getDropDownSubjects(selectedDept, selectedYear);
-                  //         },
-                  //         child: Text(
-                  //           'Get Subjects',
-                  //           style: TextStyle(
-                  //             fontFamily: "Bold",
-                  //             color: Colors.blue,
-                  //             fontSize: 18
-                  //           )
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // SizedBox(height: 30.0,),
                   flag ? InputDecorator(
                     decoration: InputDecoration(
                     labelText: 'Subject',

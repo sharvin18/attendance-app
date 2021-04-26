@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'camscan.dart';
+import 'home.dart';
 
 class SubClass extends StatefulWidget {
   final String course;
@@ -20,6 +21,60 @@ class SubClass extends StatefulWidget {
 class _SubClassState extends State<SubClass> {
   List detail = [];
   List ids = [];
+
+  callStudent(BuildContext context, String phone, String name) {
+
+    // set up the buttons
+    Widget cancelButton = TextButton(
+      child: Text(
+        "No",
+        style: TextStyle(
+          fontFamily: "Medium",
+          fontSize: 18.0,
+          color: Colors.red,
+        ),
+      ),
+      onPressed:  () {
+        Navigator.of(context).pop();
+      },
+    );
+    Widget continueButton =TextButton(
+      child: Text(
+        "Yes",
+        style: TextStyle(
+          fontFamily: "Medium",
+          fontSize: 18.0,
+          color: Colors.green,
+        ),
+      ),
+      onPressed:  () async {
+        Navigator.of(context).pop();
+        launch("tel:" + phone);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Call"),
+      content: Text("Do you want to call ${name}: \n${phone}",
+          style: TextStyle(
+            fontFamily: "Medium"
+          )
+      ),
+      actions:[
+        cancelButton,
+        continueButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
 
   @override
   void initState() {
@@ -61,7 +116,12 @@ class _SubClassState extends State<SubClass> {
                                   IconButton(
                                       icon: Icon(Icons.arrow_back, color: Colors.white, size: 28.0,),
                                       onPressed: (){
-                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => Home(),
+                                          ),
+                                        );
                                       }
                                   ),
                                   Padding(
@@ -98,7 +158,7 @@ class _SubClassState extends State<SubClass> {
                 ),
                 SizedBox(height: 20),
                 Container(
-                  height: 20,
+                  height: 30,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -151,7 +211,7 @@ class _SubClassState extends State<SubClass> {
                 Container(
                   //height: h - 173,
                   //height: h - 190,
-                  height: h - 197,
+                  height: h - 207,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(40.0)),
                     color: bgColor,
@@ -219,7 +279,7 @@ class _SubClassState extends State<SubClass> {
 
                                             return GestureDetector(
                                               onLongPress: (){
-                                                launch("tel:" + studentlist.data()['phone'].toString());
+                                                callStudent(context, studentlist.data()['phone'].toString(), studentlist.data()['name'].toString());
                                               },
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
