@@ -1,6 +1,7 @@
 import 'package:animations/animations.dart';
 import 'package:attendance_app/Authentication/auth.dart';
 import 'package:attendance_app/Screens/signIn.dart';
+import 'package:attendance_app/Screens/splash_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,7 +22,6 @@ Future<void> main() async {
     print(e);
   }
   await Firebase.initializeApp();
-  await getTeacher().then((value) => existence == true? appTheme(themeColor): null);
   loading = false;
   runApp(MyApp());
 }
@@ -54,9 +54,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      home: FirebaseAuth.instance.currentUser != null
-          ? Home()
-          : SignIn(),
+      home: splashScreen(),
 
       debugShowCheckedModeBanner: false,
     );

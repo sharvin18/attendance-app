@@ -12,8 +12,8 @@ class Loading extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.blue[700], Colors.blue[100]],
-            stops: [0.0, 1.0],
+            colors: [Colors.blue[800], Colors.blue[300]],
+            stops: [0.0, 0.7],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             tileMode: TileMode.repeated,
@@ -25,7 +25,7 @@ class Loading extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SpinKitChasingDots(
+              SpinKitThreeBounce(
                 color: Colors.blue[800],
                 size: 50.0,
               ),

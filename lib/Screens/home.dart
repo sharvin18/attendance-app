@@ -14,11 +14,13 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
+  List temp;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     loading = false;
+
   }
 
   @override
@@ -26,8 +28,7 @@ class _HomeState extends State<Home> {
     final h = MediaQuery.of(context).size.height;
     final w = MediaQuery.of(context).size.width;
     final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-    print(h);
-    print(h - 153);
+
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -139,6 +140,7 @@ class _HomeState extends State<Home> {
                               shrinkWrap: true,
                               itemCount: subjects.length,
                               itemBuilder: (context, index) {
+                                temp = year[index].split("-");
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                                   child: GestureDetector(
@@ -155,18 +157,16 @@ class _HomeState extends State<Home> {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           gradient: LinearGradient(
-                                            colors: index%4==0? [card1Dark, card1Light]
-                                                : index%4==1?[card2Dark, card2Light]
-                                                : index%4==2?[card3Dark, card3Light]
-                                                : [card4Dark, card4Light],
+                                            colors: temp[0] == "FE"? [cardFeDark, cardFeLight]
+                                                : temp[0] == "SE"?[cardSeDark, cardSeLight]
+                                                : temp[0] == "TE"?[cardTeDark, cardTeLight]
+                                                : [cardBeDark, cardBeLight],
                                             stops:[0.0, 0.6],
                                             begin: Alignment.topLeft,
                                             end: Alignment.bottomRight,
                                           ),
                                           borderRadius: BorderRadius.only(topRight: Radius.circular(30.0),bottomRight: Radius.circular(30.0),
                                               topLeft: Radius.circular(15.0),bottomLeft: Radius.circular(15.0)),
-                                          //borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          //boxShadow: [BoxShadow(color: Color(0X95E9EBF0), blurRadius: 2, spreadRadius: 2)],
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(10.0),
