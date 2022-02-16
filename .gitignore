@@ -1,6 +1,7 @@
 # Node modules
 node_modules/
-
+jstore_automation/files/comps_data.json
+jstore_automation/files/SEM VI_COMP DLOC List.xlsx
 
 # Miscellaneous
 *.class
