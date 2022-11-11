@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "661446325154",
+    "project_id": "marku-ce382",
+    "storage_bucket": "marku-ce382.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:661446325154:android:51c8ed73bc6c27192ab8fb",
+        "android_client_info": {
+          "package_name": "com.gencoders.attendance_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "661446325154-d3v94na11h7l38p64h59s0ehi55h0vq9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gencoders.attendance_app",
+            "certificate_hash": "50a3b1b2c4935726cdee1e219b224d5773951e44"
+          }
+        },
+        {
+          "client_id": "661446325154-uar1qtm5h5njbnlu5asrrnd0llh5uer4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoeynYX8lffqNmu1dA8cSNc5CHpcTxiwY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "661446325154-uar1qtm5h5njbnlu5asrrnd0llh5uer4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
