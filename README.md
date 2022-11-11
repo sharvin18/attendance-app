@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 # attendance_app
 
 THIS WILL BE THE BEST PROJECT
 
 A new Flutter application.
+=======
+# marku
+
+A new Flutter project.
+>>>>>>> version-upgrade
 
 ## Getting Started
 
