@@ -1,15 +1,10 @@
 import 'package:animations/animations.dart';
-import 'package:attendance_app/Authentication/auth.dart';
-import 'package:attendance_app/Screens/signIn.dart';
 import 'package:attendance_app/Screens/splash_screen.dart';
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'Authentication/dbdata.dart';
-import 'Helpers/constants.dart';
-import 'Screens/home.dart';
 
 List<CameraDescription> cameras = [];
 

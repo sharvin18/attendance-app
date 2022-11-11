@@ -31,6 +31,7 @@ class _CamscanState extends State<Camscan> {
   File imageFile;
   bool _load = false;
   bool tick = false;
+  bool cross = false;
   static const twoSec = const Duration(seconds: 2);
 
   Future<String> scan(String imgpath) async{
@@ -58,6 +59,7 @@ class _CamscanState extends State<Camscan> {
             break;
           }
           else{
+            id="0";
             print("Student does not exist");
             break;
           }
@@ -142,10 +144,18 @@ class _CamscanState extends State<Camscan> {
         print("Student id: ${student_id}");
         setState(()=> _load = false);
 
-        if(student_id.length != 9 && student_id != ""){
+        if(student_id != "" && student_id == "0"){
+          // put cross sign
+          setState(()=> cross = true);
+          new Future.delayed(new Duration(seconds: 1), () {
+            setState(() {
+              cross = false;
+            });
+          });
+        }else if(student_id != "" && student_id.length != 9){
           ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
         }
-        else if(student_id.length == 9 && student_id != ""){
+        else if(student_id != "" && student_id.length == 9){
           setState(()=> tick = true);
           new Future.delayed(new Duration(seconds: 1), () {
             setState(() {
@@ -246,6 +256,21 @@ class _CamscanState extends State<Camscan> {
                   color: Colors.green,
                 ),
                 child: Icon(Icons.done_sharp, color: Colors.white, size: 20,),
+              ),
+            ),
+          ) cross? Container(
+            height: height,
+            width: width,
+            color: Colors.transparent,
+            child: Center(
+              child: Container(
+                height: 40,
+                width: 40,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: Colors.red,
+                ),
+                child: Icon(Icons.highlight_remove_sharp, color: Colors.white, size: 20,),
               ),
             ),
           ) : Container()
