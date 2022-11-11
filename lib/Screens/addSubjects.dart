@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:attendance_app/Helpers/widgets.dart';
-import 'package:flutter/material.dart';
-import 'home.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 import 'Home.dart';
->>>>>>> version-upgrade
 import 'loading.dart';
 
 class AddSubjects extends StatefulWidget {
@@ -31,11 +23,7 @@ class add_subject extends State<AddSubjects>{
   // var subs = ['Select a subject', 'subject1', 'subject2', 'subject3'];
   var yr = ['Select a year', 'FE', 'SE', 'TE', 'BE'];
   var dept = ['Select a department', 'Comps', 'AI', 'IT', 'EXTC', 'Mech'];
-<<<<<<< HEAD
-  var selectedDept = "Select a department";
-=======
   String selectedDept = "Select a department";
->>>>>>> version-upgrade
   var selectedYear = "Select a year";
   var selectedSub = "Select a subject";
   String counter = "Get";
@@ -49,15 +37,10 @@ class add_subject extends State<AddSubjects>{
 
  getDropDownSubjects(String dept, String yr) async {
    if(selectedDept != "Select a department" && selectedYear != "Select a year") {
-<<<<<<< HEAD
-     subs = [];
-     subs = await getSubjects(selectedDept.toLowerCase(), selectedYear.toUpperCase());
-=======
      // subs = [];
      subs = await getSubjects(selectedDept.toLowerCase(), selectedYear.toUpperCase());
      subs = subs[0];
      print(subs);
->>>>>>> version-upgrade
      subs.insert(0, 'Select a subject');
      print(subs);
      selectedSub = "Select a subject";
@@ -135,15 +118,9 @@ class add_subject extends State<AddSubjects>{
                             ),
                           );
                         }).toList(),
-<<<<<<< HEAD
-                        onChanged: (String newValueSelected) async {
-                          setState(() {
-                            this.selectedDept = newValueSelected;
-=======
                         onChanged: (var newValueSelected) async {
                           setState(() {
                             this.selectedDept = newValueSelected.toString();
->>>>>>> version-upgrade
                             getDropDownSubjects(selectedDept, selectedYear);
                           });
                         },
@@ -166,11 +143,7 @@ class add_subject extends State<AddSubjects>{
 
                   ),
                     child:DropdownButtonHideUnderline(
-<<<<<<< HEAD
-                      child:DropdownButton(
-=======
                       child:DropdownButton<dynamic>(
->>>>>>> version-upgrade
                         dropdownColor: bgCardColor,
                         focusColor: textColor,
                         elevation: 4,
@@ -188,15 +161,9 @@ class add_subject extends State<AddSubjects>{
                             ),
                           );
                         }).toList(),
-<<<<<<< HEAD
-                        onChanged: (String newValueSelected) async {
-                          setState(() {
-                            this.selectedYear = newValueSelected;
-=======
                         onChanged: (var newValueSelected) async {
                           setState(() {
                             selectedYear = newValueSelected.toString();
->>>>>>> version-upgrade
                             getDropDownSubjects(selectedDept, selectedYear);
                           });
 
@@ -205,11 +172,7 @@ class add_subject extends State<AddSubjects>{
                       ),
                     ),
                   ),
-<<<<<<< HEAD
-                  SizedBox(height: 25.0,),
-=======
                   const SizedBox(height: 25.0,),
->>>>>>> version-upgrade
                   flag ? InputDecorator(
                     decoration: InputDecoration(
                     labelText: 'Subject',
@@ -225,11 +188,7 @@ class add_subject extends State<AddSubjects>{
 
                   ),
                     child:DropdownButtonHideUnderline(
-<<<<<<< HEAD
-                      child:DropdownButton(
-=======
                       child:DropdownButton<dynamic>(
->>>>>>> version-upgrade
                         dropdownColor: bgCardColor,
                         focusColor: textColor,
                         elevation: 4,
@@ -249,22 +208,14 @@ class add_subject extends State<AddSubjects>{
                         }).toList(),
                         onChanged: (var newValueSelected) {
                           setState(() {
-<<<<<<< HEAD
-                            this.selectedSub = newValueSelected;
-=======
                             selectedSub = newValueSelected.toString();
->>>>>>> version-upgrade
                           });
                         },
                         value: selectedSub,
                       ),
                     ),
                   ):Container(),
-<<<<<<< HEAD
-                  SizedBox(height: 50.0,),
-=======
                   const SizedBox(height: 50.0,),
->>>>>>> version-upgrade
                   Container(
                     width: MediaQuery.of(context).size.width * 0.7,
                     child: ElevatedButton(
@@ -285,19 +236,11 @@ class add_subject extends State<AddSubjects>{
                           }
                         },
                         style: ElevatedButton.styleFrom(
-<<<<<<< HEAD
-                          padding: EdgeInsets.all(0.0),
-                          primary: Colors.white,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(75.0)),
-                          textStyle: TextStyle(
-=======
                           padding: const EdgeInsets.all(0.0),
                           primary: Colors.white,
                           elevation: 4,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(75.0)),
                           textStyle: const TextStyle(
->>>>>>> version-upgrade
                             color: Color(0xFFFFFFFF),
                             fontSize: 18,
                             fontFamily: "Bold",
@@ -309,15 +252,9 @@ class add_subject extends State<AddSubjects>{
                             gradient: LinearGradient(colors: <Color>[Color(0xFF3a5af9), Color(0xFF7449fa)]),
                             borderRadius: BorderRadius.all(Radius.circular(80.0)),
                           ),
-<<<<<<< HEAD
-                          child: Center(
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-=======
                           child: const Center(
                             child: Padding(
                               padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
->>>>>>> version-upgrade
                               child: Text(
                                 "Add Subject",
                                 style: TextStyle(fontSize: 18, fontFamily: "Bold"),

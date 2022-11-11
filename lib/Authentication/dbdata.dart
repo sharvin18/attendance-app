@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Helpers/widgets.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-
-String name,email,profileimg,total="0",themeColor;
-List subjects,year;
-bool existence;
-bool loading;
-=======
 import 'package:marku/Helpers/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +7,6 @@ String name="",email="",profileimg="",total="0",themeColor="";
 List subjects=[],year=[];
 bool existence=false;
 bool loading=false;
->>>>>>> version-upgrade
 
 Future<void> addTeacher(String uid, String name, String email, String profileimg) async {
   return await FirebaseFirestore.instance.collection("teachers").doc(uid).set({
@@ -32,24 +20,6 @@ Future<void> addTeacher(String uid, String name, String email, String profileimg
 }
 
 Future getTeacher() async {
-<<<<<<< HEAD
-  try {
-    await FirebaseFirestore.instance
-        .collection('teachers')
-        .doc(FirebaseAuth.instance.currentUser.uid)
-        .get()
-        .then((value) {
-      name = value.get('name');
-      email = value.get('email');
-      profileimg = value.get('profileimg');
-      subjects = value.get('subjects');
-      year = value.get('year');
-      themeColor = value.get('theme');
-      existence=value.exists;
-    });
-  } catch (e) {}
-
-=======
   print("getTeacher method invoked");
   await FirebaseFirestore.instance
       .collection('teachers')
@@ -71,35 +41,22 @@ Future getTeacher() async {
 
       });
   print("GET TEACHER CORE FUNCTION DONE");
->>>>>>> version-upgrade
 }
 
 
 Future<String> getTotalStudents(String branch, String year)async {
-<<<<<<< HEAD
-  await FirebaseFirestore.instance.
-=======
   return await FirebaseFirestore.instance.
->>>>>>> version-upgrade
   collection(branch).
   doc(year).
   get().
   then((val) => total = val.get('total_students'));
-<<<<<<< HEAD
-  print(total);
-=======
   // print(total);
->>>>>>> version-upgrade
 }
 
 Future changeTheme(String newTheme) async {
   return await FirebaseFirestore.instance
       .collection("teachers")
-<<<<<<< HEAD
-      .doc(FirebaseAuth.instance.currentUser.uid)
-=======
       .doc(FirebaseAuth.instance.currentUser?.uid)
->>>>>>> version-upgrade
       .update({
     'theme': newTheme,
   });
@@ -127,19 +84,11 @@ Future<List> getStudents(String year, String branch) async {
       .collection('students')
       .orderBy('roll', descending: false)
       .get().then((querySnapshot){
-<<<<<<< HEAD
-    querySnapshot.docs.forEach((result) {
-      studentName.add(result.data()['name']);
-      studentRoll.add(result.data()['roll']);
-      studentId.add(result.data()['id']);
-    });
-=======
     for (var result in querySnapshot.docs) {
       studentName.add(result.data()['name']);
       studentRoll.add(result.data()['roll']);
       studentId.add(result.data()['id']);
     }
->>>>>>> version-upgrade
   });
   studentDetail.add(studentName);
   studentDetail.add(studentRoll);
@@ -159,11 +108,7 @@ Future<List> getDates(String year, String branch, String sub, var startDate, var
       .collection(sub)
       .orderBy('date', descending: false)
       .get().then((querySnapshot) {
-<<<<<<< HEAD
-    querySnapshot.docs.forEach((result) {
-=======
     for (var result in querySnapshot.docs) {
->>>>>>> version-upgrade
 
       date = result.data()['date'];
 
@@ -171,11 +116,7 @@ Future<List> getDates(String year, String branch, String sub, var startDate, var
         lecs.add(result.data()['present_students']);
         dates.add(getFormattedDate(date));
       }
-<<<<<<< HEAD
-    });
-=======
     }
->>>>>>> version-upgrade
   });
   lecDetails.add(dates);
   lecDetails.add(lecs);
@@ -184,16 +125,6 @@ Future<List> getDates(String year, String branch, String sub, var startDate, var
 
 Future<List> getSubjects(String br, String yr) async {
   List subs = [];
-<<<<<<< HEAD
-  final List<DocumentSnapshot> documents = (await FirebaseFirestore.instance
-                      .collection(br)
-                        .where("year", isEqualTo: yr)
-                        .get()).docs;
-  documents.forEach((element) {
-    subs = element.data()['subjects'];
-  });
-
-=======
   await FirebaseFirestore.instance
                       .collection(br)
                         .where("year", isEqualTo: yr)
@@ -203,18 +134,13 @@ Future<List> getSubjects(String br, String yr) async {
       subs.add(data);
     }
   });
->>>>>>> version-upgrade
   return subs;
 }
 
 Future updateSubject(List sub, List yr) async {
   await FirebaseFirestore.instance
       .collection("teachers")
-<<<<<<< HEAD
-      .doc(FirebaseAuth.instance.currentUser.uid)
-=======
       .doc(FirebaseAuth.instance.currentUser?.uid)
->>>>>>> version-upgrade
       .update({
     'subjects': sub,
     'year': yr,
@@ -222,11 +148,7 @@ Future updateSubject(List sub, List yr) async {
 
   return await FirebaseFirestore.instance
       .collection('teachers')
-<<<<<<< HEAD
-      .doc(FirebaseAuth.instance.currentUser.uid)
-=======
       .doc(FirebaseAuth.instance.currentUser?.uid)
->>>>>>> version-upgrade
       .get()
       .then((value) {
     subjects = value.get('subjects');

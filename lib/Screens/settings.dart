@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:flutter/material.dart';
-
-import 'home.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Screens/Home.dart';
 
 import 'package:flutter/material.dart';
->>>>>>> version-upgrade
 
 class Settings extends StatefulWidget {
   @override
@@ -19,11 +11,7 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
-<<<<<<< HEAD
-  bool counter;
-=======
   bool counter = false;
->>>>>>> version-upgrade
   @override
   void initState() {
     // TODO: implement initState
