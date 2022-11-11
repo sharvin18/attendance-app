@@ -1,10 +1,7 @@
-import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:marku/Helpers/widgets.dart';
+import 'package:marku/Screens/Home.dart';
 import 'package:marku/Screens/confirm_attendance.dart';
 import 'package:marku/main.dart';
-import 'package:marku/Screens/subclass.dart';
-// import 'package:marku/Helpers/text_recognizer.dart';
-// import 'package:marku/model/data_layer.dart';
 
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -16,19 +13,19 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'dart:io';
 
-class Camscan extends StatefulWidget {
+class CamScan extends StatefulWidget {
   final List id ;
   final String branch;
   final String subject;
-  final List present_id;
-  Camscan(this.id, this.branch, this.subject,this.present_id);
+  final List presentId;
+  CamScan(this.id, this.branch, this.subject,this.presentId);
 
   @override
-  _CamscanState createState() => _CamscanState();
+  _CamScanState createState() => _CamScanState();
 }
 
 
-class _CamscanState extends State<Camscan> {
+class _CamScanState extends State<CamScan> {
 
   late CameraController _controller;
   late Timer timer;
@@ -36,7 +33,7 @@ class _CamscanState extends State<Camscan> {
   bool _load = false;
   bool tick = false;
   bool cross = false;
-  static const twoSec = Duration(seconds: 2);
+  // static const twoSec = Duration(seconds: 2);
 
   Future<String> getText(String path) async {
     final inputImage = InputImage.fromFilePath(path);
@@ -59,19 +56,19 @@ class _CamscanState extends State<Camscan> {
     for (TextBlock block in recognisedText.blocks) {
       for (TextLine line in block.lines) {
         // Checking if the line contains an email address
-        print(line.text.toString());
+        // print(line.text.toString());
         if (line.text.toString().contains("No.:")) {
           List idno = line.text.toString().split(" ");
           if (widget.id.contains(idno[idno.length-1])){
-            if(!widget.present_id.contains(idno[idno.length - 1])){
-              widget.present_id.add(idno[idno.length - 1]);
+            if(!widget.presentId.contains(idno[idno.length - 1])){
+              widget.presentId.add(idno[idno.length - 1]);
             }
             id = idno[idno.length - 1];
             break;
           }
           else{
             id="0";
-            print("Student does not exist");
+            // print("Student does not exist");
             break;
           }
         }
@@ -125,31 +122,31 @@ class _CamscanState extends State<Camscan> {
 
     // Checking whether the controller is initialized
     if (!_controller.value.isInitialized) {
-      print("Controller is not initialized");
+      // print("Controller is not initialized");
       return "Camera controller not initialized";
     }
 
     // Formatting Date and Time
-    String dateTime = DateFormat.yMMMd()
-        .addPattern('-')
-        .add_Hms()
-        .format(DateTime.now())
-        .toString();
+    // String dateTime = DateFormat.yMMMd()
+    //     .addPattern('-')
+    //     .add_Hms()
+    //     .format(DateTime.now())
+    //     .toString();
 
-    String formattedDateTime = dateTime.replaceAll(' ', '');
-    print("Formatted: $formattedDateTime");
+    // String formattedDateTime = dateTime.replaceAll(' ', '');
+    // print("Formatted: $formattedDateTime");
 
     // Retrieving the path for saving an image
     final Directory appDocDir = await getApplicationDocumentsDirectory();
     final String visionDir = '${appDocDir.path}/Photos/VisionImages';
     await Directory(visionDir).create(recursive: true);
-    final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
+    // final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
 
     // Checking whether the picture is being taken
     // to prevent execution of the function again
     // if previous execution has not ended
     if (_controller.value.isTakingPicture) {
-      print("Processing is in progress...");
+      // print("Processing is in progress...");
       return "Processing img...";
     }
 
@@ -159,11 +156,9 @@ class _CamscanState extends State<Camscan> {
       final image = await _controller.takePicture();
       return image.path;
     } on CameraException catch (e) {
-      print("Camera Exception: $e");
+      // print("Camera Exception: $e");
       return e.toString();
     }
-
-    return "no image";
   }
 
 
@@ -190,15 +185,15 @@ class _CamscanState extends State<Camscan> {
     print("Reached Timer");
     setState(()=> _load = true);
     await _takePicture().then((String path) async  {
-      print("Taken Picture");
+      // print("Taken Picture");
       if (path != null) {
-        print("Clicked");
-        // String student_id = await scan(path);
-        String student_id = await getText(path);
-        print("Student id: ${student_id}");
+        // print("Clicked");
+        // String studentId = await scan(path);
+        String studentId = await getText(path);
+        // print("Student id: ${studentId}");
         setState(()=> _load = false);
 
-        if(student_id != "" && student_id == "0"){
+        if(studentId != "" && studentId == "0"){
           // put cross sign
           setState(()=> cross = true);
           Future.delayed(const Duration(seconds: 1), () {
@@ -206,10 +201,10 @@ class _CamscanState extends State<Camscan> {
               cross = false;
             });
           });
-        }else if(student_id != "" && student_id.length != 9){
+        }else if(studentId != "" && studentId.length != 9){
           ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
         }
-        else if(student_id != "" && student_id.length == 9){
+        else if(studentId != "" && studentId.length == 9){
           setState(()=> tick = true);
           Future.delayed(const Duration(seconds: 1), () {
             setState(() {
@@ -250,10 +245,12 @@ class _CamscanState extends State<Camscan> {
                     GestureDetector(
                       onTap: (){
                         timer.cancel();
+                        _controller.dispose();
                         Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => SubClass(widget.branch, widget.subject)),
-                            (route) => false);
+                            context,
+                            MaterialPageRoute(builder: (builder) => const Home()),
+                              (route) => false);
+                        // Navigator.pop(context);
                       },
                       child: Container(
                         height: 60,
@@ -262,14 +259,15 @@ class _CamscanState extends State<Camscan> {
                           borderRadius: BorderRadius.circular(30),
                           color: Colors.red,
                         ),
-                        child: Icon(Icons.clear, color: Colors.white, size: 40,),
+                        child: const Icon(Icons.clear, color: Colors.white, size: 40,),
                       ),
                     ),
 
                     GestureDetector(
                       onTap: (){
                         timer.cancel();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.present_id, widget.branch, widget.subject,widget.id)));
+                        _controller.dispose();
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId, widget.branch, widget.subject,widget.id)));
                       },
                       child: Container(
                         height: 60,

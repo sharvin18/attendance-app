@@ -1,12 +1,13 @@
 import 'package:marku/Authentication/auth.dart';
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
-import 'package:marku/Screens/mySubjects.dart';
+import 'package:marku/Screens/about.dart';
 import 'package:marku/Screens/settings.dart';
 import 'package:marku/Screens/signIn.dart';
+import 'package:marku/Screens/excelsheet.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:marku/Screens/excelsheet.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -109,7 +110,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         child: Row(
                           children: <Widget>[
                             //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
-                            Icon(Icons.date_range_outlined, color: iconColor, size: 20,),
+                            // Icon(Icons.date_range_outlined, color: iconColor, size: 20,),
                             const SizedBox(width: 20),
                             Text(
                               "Generate Attendance",
@@ -123,36 +124,6 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         ),
                       ),
                     ),
-                    //SizedBox(height: 15),
-                    const Divider(color: Color(0XFFDADADA), height: 1),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context)=> MySubjects())
-                        );
-                      },
-                      child: Container(
-                        color: bgCardColor,
-                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
-                        child: Row(
-                          children: <Widget>[
-                            //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
-                            Icon(Icons.update, color: iconColor, size: 20,),
-                            const SizedBox(width: 20),
-                            Text(
-                              "My Subjects",
-                              style: TextStyle(
-                                color: textColor,
-                                fontFamily: "Medium",
-                                fontSize: 18.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    //SizedBox(height: 15),
                     const Divider(color: Color(0XFFDADADA), height: 1),
                     GestureDetector(
                       onTap: () {
@@ -180,7 +151,34 @@ class DrawerWidgetState extends State<DrawerWidget> {
                         ),
                       ),
                     ),
-                    //SizedBox(height: 15),
+                    const Divider(color: Color(0XFFDADADA), height: 1),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context)=> About())
+                        );
+                      },
+                      child: Container(
+                        color: bgCardColor,
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                        child: Row(
+                          children: <Widget>[
+                            //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
+                            // Icon(Icons.update, color: iconColor, size: 20,),
+                            const SizedBox(width: 20),
+                            Text(
+                              "About",
+                              style: TextStyle(
+                                color: textColor,
+                                fontFamily: "Medium",
+                                fontSize: 18.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     const Divider(color: Color(0XFFDADADA), height: 1),
                     //SizedBox(height: 15),
                     GestureDetector(

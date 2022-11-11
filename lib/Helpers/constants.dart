@@ -7,14 +7,8 @@ var iconColor;
 var bgCardColor;
 var textSnack;
 var bgSnack;
-var cardFeDark;
-var cardFeLight;
-var cardSeDark;
-var cardSeLight;
-var cardTeDark;
-var cardTeLight;
-var cardBeDark;
-var cardBeLight;
+var cardDark;
+var cardLight;
 var dividerColor;
 
 var flourescentBlue1 = Color(0XFF00C2BA);
@@ -49,14 +43,8 @@ appTheme(String themeType){
 		bgSnack = Color(0XFFffffff);
 		dividerColor = Colors.grey;
 
-		cardFeDark = flourescentGreen1;
-		cardFeLight = flourescentGreen2;
-		cardSeDark = flourescentBlue1;
-		cardSeLight = flourescentBlue2;
-		cardTeDark = flourescentYellow1;
-		cardTeLight = flourescentYellow2;
-		cardBeDark = flourescentOrange1;
-		cardBeLight = flourescentOrange2;
+		cardDark = flourescentBlue1;
+		cardLight = flourescentBlue2;
 
 	}else{
 
@@ -68,14 +56,8 @@ appTheme(String themeType){
 		bgSnack = Color(0XFF000000);
 		dividerColor = Colors.grey[200];
 
-		cardFeDark = green1;
-		cardFeLight = green2;
-		cardSeDark = blue1;
-		cardSeLight = blue2;
-		cardTeDark = yellow1;
-		cardTeLight = yellow2;
-		cardBeDark = orange1;
-		cardBeLight = orange2;
+		cardDark = blue1;
+		cardLight = blue2;
 	}
 }
 

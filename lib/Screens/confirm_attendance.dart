@@ -87,7 +87,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                 child: IconButton(
                                     icon: Icon(Icons.arrow_back, color: Colors.white, size: 28.0,),
                                     onPressed: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => Camscan(widget.total_id,widget.branch,widget.subject,widget.attendance)));
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CamScan(widget.total_id,widget.branch,widget.subject,widget.attendance)));
                                     }
                                 ),
                               ),

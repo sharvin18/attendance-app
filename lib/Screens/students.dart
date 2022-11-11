@@ -9,16 +9,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SubClass extends StatefulWidget {
+class StudentDetails extends StatefulWidget {
   final String course;
   final String subject;
 
-  SubClass(this.course, this.subject);
+  StudentDetails(this.course, this.subject);
   @override
-  _SubClassState createState() => _SubClassState();
+  _StudentDetailsState createState() => _StudentDetailsState();
 }
 
-class _SubClassState extends State<SubClass> {
+class _StudentDetailsState extends State<StudentDetails> {
   List detail = [];
   List ids = [];
 
@@ -119,18 +119,13 @@ class _SubClassState extends State<SubClass> {
                                   IconButton(
                                       icon: Icon(Icons.arrow_back, color: Colors.white, size: 28.0,),
                                       onPressed: (){
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => Home(),
-                                          ),
-                                        );
+                                        Navigator.pop(context);
                                       }
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(left:10.0, top:5.0),
                                     child: Text(
-                                        'Class Details',
+                                        'Student Details',
                                         style: TextStyle(
                                             fontFamily: "Medium",
                                             fontSize: 22.0,
@@ -139,19 +134,6 @@ class _SubClassState extends State<SubClass> {
                                     ),
                                   ),
                                 ],
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.only(top:5.0),
-                                child: IconButton(
-                                    icon: Icon(Icons.camera_alt_outlined, color: Colors.white, size: 28),
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => Camscan(ids, widget.course, widget.subject, []),
-                                      ),
-                                    )
-                                ),
                               )
                             ],
                           ),
@@ -163,39 +145,8 @@ class _SubClassState extends State<SubClass> {
                 Container(
                   height: 30,
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left:20.0),
-                        child: Text(
-                            "Batch:  ${widget.course}",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: "Medium",
-                              color: Colors.white,
-                            )
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 30,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left:20.0),
-                        child: Text(
-                            "Subject:  ${widget.subject}",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: "Medium",
-                              color: Colors.white,
-                            )
-                        ),
-                      ),
                       Padding(
                         padding: const EdgeInsets.only(right:30),
                         child: Text(
@@ -214,7 +165,7 @@ class _SubClassState extends State<SubClass> {
                 Container(
                   //height: h - 173,
                   //height: h - 190,
-                  height: h - 207,
+                  height: h - 167,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(topRight: Radius.circular(40.0)),
                     color: bgColor,
