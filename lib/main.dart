@@ -1,11 +1,11 @@
-import 'Screens/splash_screen.dart';
-import 'Authentication/dbdata.dart';
-
+import 'package:animations/animations.dart';
+import 'package:marku/Screens/splash_screen.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:animations/animations.dart';
+import 'Authentication/dbdata.dart';
+
 
 List<CameraDescription> cameras = [];
 

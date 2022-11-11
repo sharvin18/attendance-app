@@ -27,18 +27,11 @@ apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 apply plugin: 'com.google.gms.google-services'
 
 android {
-<<<<<<< HEAD
-    compileSdkVersion 29
-
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-=======
     compileSdkVersion flutter.compileSdkVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
->>>>>>> version-upgrade
     }
 
     lintOptions {
@@ -46,8 +39,6 @@ android {
         checkReleaseBuilds false
     }
 
-<<<<<<< HEAD
-=======
     kotlinOptions {
         jvmTarget = '1.8'
     }
@@ -56,16 +47,11 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
     }
 
->>>>>>> version-upgrade
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.gencoders.attendance_app"
         minSdkVersion 23
-<<<<<<< HEAD
-        targetSdkVersion 29
-=======
         targetSdkVersion flutter.targetSdkVersion
->>>>>>> version-upgrade
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -85,14 +71,9 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-<<<<<<< HEAD
-    implementation platform('com.google.firebase:firebase-bom:26.6.0')
-    implementation "androidx.multidex:multidex:2.0.0"
-=======
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
     implementation "androidx.multidex:multidex:2.0.0"
     implementation("com.squareup.okhttp3:okhttp:4.9.3")
->>>>>>> version-upgrade
 }
 
 googleServices { disableVersionCheck = true }

@@ -4,11 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
-<<<<<<< HEAD
-=======
 	<key>CFBundleDisplayName</key>
 	<string>Marku</string>
->>>>>>> version-upgrade
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -16,11 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-<<<<<<< HEAD
-	<string>attendance_app</string>
-=======
 	<string>marku</string>
->>>>>>> version-upgrade
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
