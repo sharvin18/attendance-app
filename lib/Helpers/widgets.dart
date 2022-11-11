@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:flutter/material.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:flutter/material.dart';
 import 'package:marku/Helpers/constants.dart';
->>>>>>> version-upgrade
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 Container customContainer(double h, double w){

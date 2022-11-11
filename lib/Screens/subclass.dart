@@ -1,24 +1,13 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:attendance_app/Helpers/widgets.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/Home.dart';
 import 'package:marku/Screens/camscan.dart';
->>>>>>> version-upgrade
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:url_launcher/url_launcher.dart';
-<<<<<<< HEAD
-import 'camscan.dart';
-import 'home.dart';
-=======
->>>>>>> version-upgrade
 
 class SubClass extends StatefulWidget {
   final String course;
@@ -50,11 +39,7 @@ class _SubClassState extends State<SubClass> {
       },
     );
     Widget continueButton =TextButton(
-<<<<<<< HEAD
-      child: Text(
-=======
       child: const Text(
->>>>>>> version-upgrade
         "Yes",
         style: TextStyle(
           fontFamily: "Medium",
@@ -64,14 +49,10 @@ class _SubClassState extends State<SubClass> {
       ),
       onPressed:  () async {
         Navigator.of(context).pop();
-<<<<<<< HEAD
-        launch("tel:" + phone);
-=======
         String url = "tel:" + phone;
         Uri _url = Uri.parse(url);
         launchUrl(_url);
         // launch("tel:" + phone);
->>>>>>> version-upgrade
       },
     );
 
@@ -123,11 +104,7 @@ class _SubClassState extends State<SubClass> {
             child: Column(
               children: [
                 PreferredSize(
-<<<<<<< HEAD
-                    preferredSize: Size.fromHeight(60),
-=======
                     preferredSize: const Size.fromHeight(60),
->>>>>>> version-upgrade
                     child: SafeArea(
                       child: Container(
                         height: 60,
@@ -182,11 +159,7 @@ class _SubClassState extends State<SubClass> {
                       ),
                     )
                 ),
-<<<<<<< HEAD
-                SizedBox(height: 20),
-=======
                 const SizedBox(height: 20),
->>>>>>> version-upgrade
                 Container(
                   height: 30,
                   child: Row(
@@ -206,11 +179,7 @@ class _SubClassState extends State<SubClass> {
                     ],
                   ),
                 ),
-<<<<<<< HEAD
-                SizedBox(height: 10),
-=======
                 const SizedBox(height: 10),
->>>>>>> version-upgrade
                 Container(
                   height: 30,
                   child: Row(
@@ -241,11 +210,7 @@ class _SubClassState extends State<SubClass> {
                     ],
                   ),
                 ),
-<<<<<<< HEAD
-                SizedBox(height: 33.0,),
-=======
                 const SizedBox(height: 33.0,),
->>>>>>> version-upgrade
                 Container(
                   //height: h - 173,
                   //height: h - 190,
@@ -288,11 +253,7 @@ class _SubClassState extends State<SubClass> {
                                   return Text('Connection State Done');
 
                                 default:
-<<<<<<< HEAD
-                                  return snapshot.data.docs.length == 0? Padding(
-=======
                                   return snapshot.data!.docs.isEmpty? Padding(
->>>>>>> version-upgrade
                                     padding: const EdgeInsets.only(top: 80),
                                     child: Center(
                                       child: Text(
@@ -313,17 +274,10 @@ class _SubClassState extends State<SubClass> {
                                           separatorBuilder: (BuildContext context, int index) =>
                                               Divider(height: 30, color: dividerColor,),
                                           scrollDirection: Axis.vertical,
-<<<<<<< HEAD
-                                          itemCount: snapshot.data.docs.length,
-                                          itemBuilder: (BuildContext context, index) {
-
-                                            DocumentSnapshot studentlist = snapshot.data.docs[index];
-=======
                                           itemCount: snapshot.data!.docs.length,
                                           itemBuilder: (BuildContext context, index) {
 
                                             DocumentSnapshot<dynamic> studentlist = snapshot.data!.docs[index];
->>>>>>> version-upgrade
                                             ids.add(studentlist.data()['id']);
 
                                             return GestureDetector(

@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import 'dart:async';
-import 'dart:io';
-import 'package:attendance_app/Helpers/widgets.dart';
-import 'package:attendance_app/Screens/confirm_attendance.dart';
-import 'package:camera/camera.dart';
-import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-=======
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/confirm_attendance.dart';
@@ -17,19 +9,12 @@ import 'package:marku/Screens/subclass.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:camera/camera.dart';
->>>>>>> version-upgrade
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-<<<<<<< HEAD
-import '../main.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'subclass.dart';
-=======
 import 'dart:async';
 import 'dart:io';
->>>>>>> version-upgrade
 
 class Camscan extends StatefulWidget {
   final List id ;
@@ -45,27 +30,6 @@ class Camscan extends StatefulWidget {
 
 class _CamscanState extends State<Camscan> {
 
-<<<<<<< HEAD
-  CameraController _controller;
-  Timer timer;
-  File imageFile;
-  bool _load = false;
-  bool tick = false;
-  static const twoSec = const Duration(seconds: 2);
-
-  Future<String> scan(String imgpath) async{
-    final File imageFile = File(imgpath);
-
-    final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imageFile);
-
-    final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-
-    final VisionText visionText = await textRecognizer.processImage(visionImage);
-
-    String id = "";
-
-    for (TextBlock block in visionText.blocks) {
-=======
   late CameraController _controller;
   late Timer timer;
   late File imageFile;
@@ -93,7 +57,6 @@ class _CamscanState extends State<Camscan> {
     String id = "";
 
     for (TextBlock block in recognisedText.blocks) {
->>>>>>> version-upgrade
       for (TextLine line in block.lines) {
         // Checking if the line contains an email address
         print(line.text.toString());
@@ -107,21 +70,13 @@ class _CamscanState extends State<Camscan> {
             break;
           }
           else{
-<<<<<<< HEAD
-=======
             id="0";
->>>>>>> version-upgrade
             print("Student does not exist");
             break;
           }
         }
       }
     }
-<<<<<<< HEAD
-    return id;
-  }
-
-=======
 
     // return recognizedList;
     return id;
@@ -166,17 +121,12 @@ class _CamscanState extends State<Camscan> {
   //   return id;
   // }
 
->>>>>>> version-upgrade
   Future<String> _takePicture() async {
 
     // Checking whether the controller is initialized
     if (!_controller.value.isInitialized) {
       print("Controller is not initialized");
-<<<<<<< HEAD
-      return null;
-=======
       return "Camera controller not initialized";
->>>>>>> version-upgrade
     }
 
     // Formatting Date and Time
@@ -191,11 +141,7 @@ class _CamscanState extends State<Camscan> {
 
     // Retrieving the path for saving an image
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-<<<<<<< HEAD
-    final String visionDir = '${appDocDir.path}/Photos/Vision\ Images';
-=======
     final String visionDir = '${appDocDir.path}/Photos/VisionImages';
->>>>>>> version-upgrade
     await Directory(visionDir).create(recursive: true);
     final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
 
@@ -204,25 +150,12 @@ class _CamscanState extends State<Camscan> {
     // if previous execution has not ended
     if (_controller.value.isTakingPicture) {
       print("Processing is in progress...");
-<<<<<<< HEAD
-      return null;
-=======
       return "Processing img...";
->>>>>>> version-upgrade
     }
 
     try {
       // Captures the image and saves it to the
       // provided path
-<<<<<<< HEAD
-      await _controller.takePicture(imagePath);
-    } on CameraException catch (e) {
-      print("Camera Exception: $e");
-      return null;
-    }
-
-    return imagePath;
-=======
       final image = await _controller.takePicture();
       return image.path;
     } on CameraException catch (e) {
@@ -231,7 +164,6 @@ class _CamscanState extends State<Camscan> {
     }
 
     return "no image";
->>>>>>> version-upgrade
   }
 
 
@@ -245,11 +177,7 @@ class _CamscanState extends State<Camscan> {
       }
       setState(() {});
     });
-<<<<<<< HEAD
-    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => trial());
-=======
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => trial());
->>>>>>> version-upgrade
   }
   @override
   void dispose() {
@@ -265,18 +193,6 @@ class _CamscanState extends State<Camscan> {
       print("Taken Picture");
       if (path != null) {
         print("Clicked");
-<<<<<<< HEAD
-        String student_id = await scan(path);
-        print("Student id: ${student_id}");
-        setState(()=> _load = false);
-
-        if(student_id.length != 9 && student_id != ""){
-          ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
-        }
-        else if(student_id.length == 9 && student_id != ""){
-          setState(()=> tick = true);
-          new Future.delayed(new Duration(seconds: 1), () {
-=======
         // String student_id = await scan(path);
         String student_id = await getText(path);
         print("Student id: ${student_id}");
@@ -296,7 +212,6 @@ class _CamscanState extends State<Camscan> {
         else if(student_id != "" && student_id.length == 9){
           setState(()=> tick = true);
           Future.delayed(const Duration(seconds: 1), () {
->>>>>>> version-upgrade
             setState(() {
               tick = false;
             });
@@ -394,9 +309,6 @@ class _CamscanState extends State<Camscan> {
                   borderRadius: BorderRadius.circular(20),
                   color: Colors.green,
                 ),
-<<<<<<< HEAD
-                child: Icon(Icons.done_sharp, color: Colors.white, size: 20,),
-=======
                 child: const Icon(Icons.done_sharp, color: Colors.white, size: 20,),
               ),
             ),
@@ -413,7 +325,6 @@ class _CamscanState extends State<Camscan> {
                   color: Colors.red,
                 ),
                 child: Icon(Icons.highlight_remove_sharp, color: Colors.white, size: 20,),
->>>>>>> version-upgrade
               ),
             ),
           ) : Container()

@@ -1,24 +1,11 @@
-import 'package:animations/animations.dart';
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/auth.dart';
-import 'package:attendance_app/Screens/signIn.dart';
-import 'package:attendance_app/Screens/splash_screen.dart';
+import 'Screens/splash_screen.dart';
+import 'Authentication/dbdata.dart';
+
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-=======
-import 'package:marku/Screens/splash_screen.dart';
-import 'package:camera/camera.dart';
->>>>>>> version-upgrade
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'Authentication/dbdata.dart';
-<<<<<<< HEAD
-import 'Helpers/constants.dart';
-import 'Screens/home.dart';
-=======
-
->>>>>>> version-upgrade
+import 'package:animations/animations.dart';
 
 List<CameraDescription> cameras = [];
 
@@ -63,11 +50,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-<<<<<<< HEAD
-      home: splashScreen(),
-=======
       home: SplashScreen(),
->>>>>>> version-upgrade
 
       debugShowCheckedModeBanner: false,
     );

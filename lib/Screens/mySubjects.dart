@@ -1,22 +1,12 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:attendance_app/Helpers/widgets.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
->>>>>>> version-upgrade
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 import 'addSubjects.dart';
-<<<<<<< HEAD
-import 'home.dart';
-=======
 import 'Home.dart';
->>>>>>> version-upgrade
 
 class MySubjects extends StatefulWidget {
   @override
@@ -27,11 +17,7 @@ class _MySubjectsState extends State<MySubjects> {
 
   bool _load = false;
   bool del = false;
-<<<<<<< HEAD
-  int del_index;
-=======
   late int del_index;
->>>>>>> version-upgrade
 
   showAlertDialog(BuildContext context, int ind) {
 

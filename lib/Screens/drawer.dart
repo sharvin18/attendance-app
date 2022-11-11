@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/auth.dart';
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:attendance_app/Screens/settings.dart';
-import 'package:attendance_app/Screens/signIn.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
-import 'excelsheet.dart';
-import 'mySubjects.dart';
-=======
 import 'package:marku/Authentication/auth.dart';
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
@@ -21,7 +8,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:marku/Screens/excelsheet.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
->>>>>>> version-upgrade
 
 class DrawerWidget extends StatefulWidget {
   @override
@@ -64,61 +50,22 @@ class DrawerWidgetState extends State<DrawerWidget> {
                     Padding(
                         padding: const EdgeInsets.only(top: 70, right: 20),
                         child: Container(
-<<<<<<< HEAD
-                          padding: EdgeInsets.fromLTRB(10, 40, 20, 40),
-                          decoration: new BoxDecoration(
-=======
                           padding: const EdgeInsets.fromLTRB(10, 40, 20, 40),
                           decoration: const BoxDecoration(
->>>>>>> version-upgrade
                               gradient: LinearGradient(colors: [
                                 Color(0xFF3a5af9), Color(0xFF7449fa),],
                                 stops:[0.0, 0.8],
                               ),
                               //color: Color(0XFF5959fc),
-<<<<<<< HEAD
-                              borderRadius: new BorderRadius.only(
-                                  bottomRight: const Radius.circular(24.0),
-                                  topRight: const Radius.circular(24.0))),
-=======
                               borderRadius: BorderRadius.only(
                                   bottomRight: Radius.circular(24.0),
                                   topRight: Radius.circular(24.0))),
->>>>>>> version-upgrade
                           /*User Profile*/
                           child: Row(
                             children: <Widget>[
                               CircleAvatar(
                                   backgroundImage: NetworkImage(profileimg),
                                   radius: 40),
-<<<<<<< HEAD
-                              SizedBox(width: 12),
-                              Expanded(
-                                child: Container(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        name,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Bold",
-                                          fontSize: 20.0,
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        email,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: "Bold",
-                                          fontSize: 12.0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-=======
                               const SizedBox(width: 12),
                               Expanded(
                                 child: Column(
@@ -143,17 +90,12 @@ class DrawerWidgetState extends State<DrawerWidget> {
                                       ),
                                     ),
                                   ],
->>>>>>> version-upgrade
                                 ),
                               )
                             ],
                           ),
                         )),
-<<<<<<< HEAD
-                    SizedBox(height: 30),
-=======
                     const SizedBox(height: 30),
->>>>>>> version-upgrade
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -163,20 +105,12 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       },
                       child: Container(
                         color: bgCardColor,
-<<<<<<< HEAD
-                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
-=======
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
->>>>>>> version-upgrade
                         child: Row(
                           children: <Widget>[
                             //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
                             Icon(Icons.date_range_outlined, color: iconColor, size: 20,),
-<<<<<<< HEAD
-                            SizedBox(width: 20),
-=======
                             const SizedBox(width: 20),
->>>>>>> version-upgrade
                             Text(
                               "Generate Attendance",
                               style: TextStyle(
@@ -190,11 +124,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                     //SizedBox(height: 15),
-<<<<<<< HEAD
-                    Divider(color: Color(0XFFDADADA), height: 1),
-=======
                     const Divider(color: Color(0XFFDADADA), height: 1),
->>>>>>> version-upgrade
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -204,20 +134,12 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       },
                       child: Container(
                         color: bgCardColor,
-<<<<<<< HEAD
-                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
-=======
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
->>>>>>> version-upgrade
                         child: Row(
                           children: <Widget>[
                             //SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
                             Icon(Icons.update, color: iconColor, size: 20,),
-<<<<<<< HEAD
-                            SizedBox(width: 20),
-=======
                             const SizedBox(width: 20),
->>>>>>> version-upgrade
                             Text(
                               "My Subjects",
                               style: TextStyle(
@@ -231,11 +153,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                     //SizedBox(height: 15),
-<<<<<<< HEAD
-                    Divider(color: Color(0XFFDADADA), height: 1),
-=======
                     const Divider(color: Color(0XFFDADADA), height: 1),
->>>>>>> version-upgrade
                     GestureDetector(
                       onTap: () {
                         Navigator.push(
@@ -245,19 +163,11 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       },
                       child: Container(
                         color: bgCardColor,
-<<<<<<< HEAD
-                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
-                            SizedBox(width: 20),
-=======
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: Row(
                           children: <Widget>[
                             // SvgPicture.asset("assets/images/settings.svg", width: 20, height: 20, color: iconColor,),
                             const SizedBox(width: 20),
->>>>>>> version-upgrade
                             Text(
                               "Settings",
                               style: TextStyle(
@@ -271,11 +181,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       ),
                     ),
                     //SizedBox(height: 15),
-<<<<<<< HEAD
-                    Divider(color: Color(0XFFDADADA), height: 1),
-=======
                     const Divider(color: Color(0XFFDADADA), height: 1),
->>>>>>> version-upgrade
                     //SizedBox(height: 15),
                     GestureDetector(
                       onTap: () async {
@@ -287,20 +193,12 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       },
                       child: Container(
                         color: bgCardColor,
-<<<<<<< HEAD
-                        padding: EdgeInsets.fromLTRB(20, 16, 20, 16),
-                        child: Row(
-                          children: <Widget>[
-                            SvgPicture.asset("assets/images/logout.svg", width: 20, height: 20, color: iconColor,),
-                            SizedBox(width: 20),
-=======
                         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
                         child: Row(
                           children: <Widget>[
 
                             // SvgPicture.asset("assets/images/logout.svg", width: 20, height: 20, color: iconColor,),
                             const SizedBox(width: 20),
->>>>>>> version-upgrade
                             Text(
                               "Sign Out",
                               style: TextStyle(
@@ -317,13 +215,8 @@ class DrawerWidgetState extends State<DrawerWidget> {
               ),
               Column(
                 children: [
-<<<<<<< HEAD
-                  Divider(color: Color(0XFFDADADA), height: 1),
-                  SizedBox(height: 20),
-=======
                   const Divider(color: Color(0XFFDADADA), height: 1),
                   const SizedBox(height: 20),
->>>>>>> version-upgrade
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -337,11 +230,7 @@ class DrawerWidgetState extends State<DrawerWidget> {
                       )
                     ],
                   ),
-<<<<<<< HEAD
-                  SizedBox(height: 20),
-=======
                   const SizedBox(height: 20),
->>>>>>> version-upgrade
                 ],
               ),
             ],

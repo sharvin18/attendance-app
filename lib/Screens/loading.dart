@@ -12,11 +12,7 @@ class Loading extends StatelessWidget {
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-<<<<<<< HEAD
-            colors: [Colors.blue[800], Colors.blue[300]],
-=======
             colors: [Colors.blue[800]!, Colors.blue[300]!],
->>>>>>> version-upgrade
             stops: [0.0, 0.7],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,

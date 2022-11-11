@@ -1,16 +1,8 @@
-<<<<<<< HEAD
-import 'package:attendance_app/Authentication/dbdata.dart';
-import 'package:attendance_app/Helpers/constants.dart';
-import 'package:attendance_app/Helpers/widgets.dart';
-import 'package:flutter/material.dart';
-import 'package:attendance_app/Helpers/save_file_mobile.dart';
-=======
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:marku/Helpers/save_file_mobile.dart';
->>>>>>> version-upgrade
 import 'package:syncfusion_flutter_xlsio/xlsio.dart'
     hide Stack, Row, Column, Alignment;
 
@@ -23,11 +15,7 @@ class ExcelSheet extends StatefulWidget {
 
 class _ExcelSheetstate extends State<ExcelSheet> {
   String start = "", end = "", a = "";
-<<<<<<< HEAD
-  String subjectIsSelected;
-=======
   String subjectIsSelected = "";
->>>>>>> version-upgrade
   var startdate = DateTime.now();
   var enddate = DateTime.now();
   List<String> subjectyear = [];
@@ -35,11 +23,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
   bool load = false;
 
   Future<void> _selectDate(BuildContext context, String when) async {
-<<<<<<< HEAD
-    final DateTime picked = await showDatePicker(
-=======
     final DateTime? picked = await showDatePicker(
->>>>>>> version-upgrade
         helpText: 'Select your Booking date',
         cancelText: 'Back',
         confirmText: "Select",
@@ -50,11 +34,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
 
-<<<<<<< HEAD
-    if (picked != null && picked != selectedDate)
-=======
     if (picked != null && picked != selectedDate) {
->>>>>>> version-upgrade
       setState(() {
         String month = picked.month.toString();
         String day = picked.day.toString();
@@ -63,10 +43,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
         print(a);
         selectedDate = picked;
       });
-<<<<<<< HEAD
-=======
     }
->>>>>>> version-upgrade
 
     if (when == "start") {
       setState(() {
@@ -228,11 +205,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                     ),
                   ],
                 ),
-<<<<<<< HEAD
-                SizedBox(
-=======
                 const SizedBox(
->>>>>>> version-upgrade
                   height: 12.0,
                 ),
                 InputDecorator(
@@ -263,26 +236,16 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                           ),
                         );
                       }).toList(),
-<<<<<<< HEAD
-                      onChanged: (String newValueSelected) {
-                        setState(() {
-                          this.subjectIsSelected = newValueSelected;
-=======
                       onChanged: (var newValueSelected) {
                         setState(() {
                           subjectIsSelected = newValueSelected.toString();
->>>>>>> version-upgrade
                         });
                       },
                       value: subjectIsSelected,
                     ),
                   ),
                 ),
-<<<<<<< HEAD
-                SizedBox(
-=======
                 const SizedBox(
->>>>>>> version-upgrade
                   height: 35.0,
                 ),
                 Card(
@@ -311,11 +274,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                         onPressed: () {},
                       ),
                     )),
-<<<<<<< HEAD
-                SizedBox(
-=======
                 const SizedBox(
->>>>>>> version-upgrade
                   height: 12.0,
                 ),
                 Card(
@@ -347,11 +306,7 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                         onPressed: () {},
                       ),
                     )),
-<<<<<<< HEAD
-                SizedBox(
-=======
                 const SizedBox(
->>>>>>> version-upgrade
                   height: 60.0,
                 ),
                 Container(
@@ -362,20 +317,12 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                         snackBar("Excel Sheet generated successfully", true);
                       },
                       style: ElevatedButton.styleFrom(
-<<<<<<< HEAD
-                        padding: EdgeInsets.all(0.0),
-=======
                         padding: const EdgeInsets.all(0.0),
->>>>>>> version-upgrade
                         primary: Colors.white,
                         elevation: 4,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(75.0)),
-<<<<<<< HEAD
-                        textStyle: TextStyle(
-=======
                         textStyle: const TextStyle(
->>>>>>> version-upgrade
                           color: Color(0xFFFFFFFF),
                           fontSize: 18,
                           fontFamily: "Bold",
@@ -390,15 +337,9 @@ class _ExcelSheetstate extends State<ExcelSheet> {
                           ]),
                           borderRadius: BorderRadius.all(Radius.circular(80.0)),
                         ),
-<<<<<<< HEAD
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
-=======
                         child: const Center(
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(16, 12, 16, 12),
->>>>>>> version-upgrade
                             child: Text(
                               "Generate Excel sheet",
                               style:
