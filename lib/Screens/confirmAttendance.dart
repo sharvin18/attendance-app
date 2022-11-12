@@ -2,8 +2,8 @@ import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/loading.dart';
-import 'package:marku/Screens/Home.dart';
-import 'package:marku/Screens/camscan.dart';
+import 'package:marku/Screens/home.dart';
+import 'package:marku/Screens/camScan.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

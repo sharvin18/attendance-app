@@ -1,7 +1,7 @@
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/widgets.dart';
-import 'package:marku/Screens/camscan.dart';
+import 'package:marku/Screens/camScan.dart';
 import 'package:marku/Screens/excelsheet.dart';
 import 'package:marku/Screens/students.dart';
 import 'package:flutter/material.dart';

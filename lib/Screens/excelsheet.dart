@@ -90,14 +90,12 @@ class _ExcelSheetstate extends State<ExcelSheet> {
     subjectIsSelected = subjectyear[0];
   }
 
-  Future<void> generateExcel(String attendance, String startD, String endD) async {
+  Future<void> generateExcel(String startD, String endD) async {
+
     setState(()=> load = true);
-    List details = attendance.split("-");
-    //Create a Excel document.
-    List studentdata =
-        await getStudents(details[1].trim(), details[2].toLowerCase());
-    List attendDetail = await getDates(details[1].trim(),
-        details[2].toLowerCase(), details[0].trim(), startD, endD);
+
+    List attendance = await getAttendance(startD, endD);
+
     startD = getFormattedDate(startD);
     endD = getFormattedDate(endD);
     //Creating a workbook.

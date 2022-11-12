@@ -1,6 +1,6 @@
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
-import 'package:marku/Screens/Home.dart';
+import 'package:marku/Screens/home.dart';
 
 import 'package:flutter/material.dart';
 

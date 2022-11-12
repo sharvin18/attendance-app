@@ -1,6 +1,6 @@
 import 'package:marku/Helpers/widgets.dart';
-import 'package:marku/Screens/Home.dart';
-import 'package:marku/Screens/confirm_attendance.dart';
+import 'package:marku/Screens/home.dart';
+import 'package:marku/Screens/confirmAttendance.dart';
 import 'package:marku/main.dart';
 
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -75,48 +75,8 @@ class _CamScanState extends State<CamScan> {
       }
     }
 
-    // return recognizedList;
     return id;
   }
-
-  // Future<String> scan(String imgpath) async{
-  //
-  //   final File imageFile = File(imgpath);
-  //   final InputImage inputImage = InputImage.fromFile(imageFile);
-  //
-  //   final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-  //
-  //   final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(imageFile);
-  //
-  //   final TextRecognizer textRecognizer = FirebaseVision.instance.textRecognizer();
-  //
-  //   final VisionText visionText = await textRecognizer.processImage(visionImage);
-  //
-  //   String id = "";
-  //
-  //   for (TextBlock block in visionText.blocks) {
-  //     for (TextLine line in block.lines) {
-  //       // Checking if the line contains an email address
-  //       print(line.text.toString());
-  //       if (line.text.toString().contains("No.:")) {
-  //         List idno = line.text.toString().split(" ");
-  //         if (widget.id.contains(idno[idno.length-1])){
-  //           if(!widget.present_id.contains(idno[idno.length - 1])){
-  //             widget.present_id.add(idno[idno.length - 1]);
-  //           }
-  //           id = idno[idno.length - 1];
-  //           break;
-  //         }
-  //         else{
-  //           id="0";
-  //           print("Student does not exist");
-  //           break;
-  //         }
-  //       }
-  //     }
-  //   }
-  //   return id;
-  // }
 
   Future<String> _takePicture() async {
 
@@ -174,6 +134,7 @@ class _CamScanState extends State<CamScan> {
     });
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => trial());
   }
+
   @override
   void dispose() {
     _controller.dispose();
@@ -182,7 +143,7 @@ class _CamScanState extends State<CamScan> {
 
   trial() async{
     setState(()=> tick = false);
-    print("Reached Timer");
+    // print("Reached Timer");
     setState(()=> _load = true);
     await _takePicture().then((String path) async  {
       // print("Taken Picture");

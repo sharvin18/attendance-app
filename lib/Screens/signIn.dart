@@ -4,7 +4,7 @@ import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Screens/loading.dart';
 import 'package:gradient_text/gradient_text.dart';
 import 'package:flutter/material.dart';
-import 'Home.dart';
+import 'home.dart';
 
 class SignIn extends StatefulWidget {
   @override
