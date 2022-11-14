@@ -150,7 +150,7 @@ class _StudentDetailsState extends State<StudentDetails> {
                       Padding(
                         padding: const EdgeInsets.only(right:30),
                         child: Text(
-                            "Total: " + total,
+                            "Total: " + total.toString(),
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: "Medium",

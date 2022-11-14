@@ -1,5 +1,6 @@
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
+import 'package:marku/Helpers/utils.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/loading.dart';
 import 'package:marku/Screens/home.dart';
@@ -13,21 +14,20 @@ import 'package:intl/intl.dart';
 
 class ConfirmAttendance extends StatefulWidget {
   final List attendance;
-  final String branch;
-  final String subject;
-  final List total_id;
-  ConfirmAttendance(this.attendance, this.branch, this.subject,this.total_id);
+  const ConfirmAttendance(this.attendance);
+
   @override
   _ConfirmAttendanceState createState() => _ConfirmAttendanceState();
 }
 
 class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   var date = DateFormat.yMd().format(DateTime.now());
-  String storeDate="",displayDate="", strength="";
+  var storeDate;
+  String displayDate="", strength="";
   List details = [];
-  List dateFormat = [];
-  List correctDate = [];
   bool _loading = false;
+
+  late List invalidIds;     // keeps a track of all invalid ids due to 30min rule.
 
   final snack = SnackBar(
     backgroundColor: Colors.black.withOpacity(0.8),
@@ -41,20 +41,20 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   );
 
   @override
-  void initState() {
+  void initState() async {
     // TODO: implement initState
     super.initState();
-    getStrength();
-    details = widget.branch.split("-");
-    storeDate = formatDateAndMonth(date);
-    displayDate = getFormattedDate(storeDate);
+
+    storeDate = getTodaysDate();
+    displayDate = formatDateDMY(storeDate);
+    invalidIds = await getInvalidIds(widget.attendance, displayDate);
   }
 
-  getStrength(){
-    int totalPresent = widget.attendance.length;
-    int totalStrength = widget.total_id.length;
-    strength = totalPresent.toString() + "/" + totalStrength.toString();
-  }
+  // getStrength(){
+  //   int totalPresent = widget.attendance.length;
+  //   int totalStrength = widget.total_id.length;
+  //   strength = totalPresent.toString() + "/" + totalStrength.toString();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +87,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                 child: IconButton(
                                     icon: Icon(Icons.arrow_back, color: Colors.white, size: 28.0,),
                                     onPressed: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CamScan(widget.total_id,widget.branch,widget.subject,widget.attendance)));
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CamScan(widget.attendance)));
                                     }
                                 ),
                               ),
@@ -109,7 +109,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                     onPressed: () async {
                                       if(widget.attendance.isNotEmpty){
                                         setState(()=> _loading = true);
-                                        await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], widget.subject, storeDate);
+                                        // await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], widget.subject, storeDate);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(builder: (context)=>Home()),

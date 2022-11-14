@@ -14,11 +14,8 @@ import 'dart:async';
 import 'dart:io';
 
 class CamScan extends StatefulWidget {
-  final List id ;
-  final String branch;
-  final String subject;
   final List presentId;
-  CamScan(this.id, this.branch, this.subject,this.presentId);
+  const CamScan(this.presentId);
 
   @override
   _CamScanState createState() => _CamScanState();
@@ -33,9 +30,9 @@ class _CamScanState extends State<CamScan> {
   bool _load = false;
   bool tick = false;
   bool cross = false;
-  // static const twoSec = Duration(seconds: 2);
+  bool isDev = true;
 
-  Future<String> getText(String path) async {
+  Future<bool> saveId(String path) async {
     final inputImage = InputImage.fromFilePath(path);
     // final inputImage = Image.file(File(path));
     final textDetector = GoogleMlKit.vision.textRecognizer();
@@ -45,6 +42,7 @@ class _CamScanState extends State<CamScan> {
     // List<RecognizedText> recognizedList = [];
     List<String> predictions = [];
 
+    // Predictions list is not being used anywhere
     for (TextBlock block in recognisedText.blocks) {
       // recognizedList.add(
       //     RecognizedText(text: block.lines, blocks: block.text.toLowerCase()));
@@ -55,46 +53,37 @@ class _CamScanState extends State<CamScan> {
 
     for (TextBlock block in recognisedText.blocks) {
       for (TextLine line in block.lines) {
-        // Checking if the line contains an email address
-        // print(line.text.toString());
+        if(isDev) print(line.text.toString());
+
+        // Logic for client
+        // if(line.text.toString().contains(",") && line.text.toString().length==20){
+        //   if (!widget.presentId.contains(line.text.toString())){
+        //     widget.presentId.add(line.text.toString());
+        //     return true;
+        //   }
+        // }
+
+        // Logic for clg Deployment
         if (line.text.toString().contains("No.:")) {
           List idno = line.text.toString().split(" ");
-          if (widget.id.contains(idno[idno.length-1])){
-            if(!widget.presentId.contains(idno[idno.length - 1])){
-              widget.presentId.add(idno[idno.length - 1]);
-            }
-            id = idno[idno.length - 1];
-            break;
+          if (isDev) print(idno[idno.length - 1]);
+          if(!widget.presentId.contains(idno[idno.length - 1])){
+            widget.presentId.add(idno[idno.length - 1]);
           }
-          else{
-            id="0";
-            // print("Student does not exist");
-            break;
-          }
+          return true;
         }
       }
     }
 
-    return id;
+    return false;
   }
 
   Future<String> _takePicture() async {
 
     // Checking whether the controller is initialized
     if (!_controller.value.isInitialized) {
-      // print("Controller is not initialized");
       return "Camera controller not initialized";
     }
-
-    // Formatting Date and Time
-    // String dateTime = DateFormat.yMMMd()
-    //     .addPattern('-')
-    //     .add_Hms()
-    //     .format(DateTime.now())
-    //     .toString();
-
-    // String formattedDateTime = dateTime.replaceAll(' ', '');
-    // print("Formatted: $formattedDateTime");
 
     // Retrieving the path for saving an image
     final Directory appDocDir = await getApplicationDocumentsDirectory();
@@ -102,21 +91,16 @@ class _CamScanState extends State<CamScan> {
     await Directory(visionDir).create(recursive: true);
     // final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
 
-    // Checking whether the picture is being taken
-    // to prevent execution of the function again
-    // if previous execution has not ended
     if (_controller.value.isTakingPicture) {
       // print("Processing is in progress...");
       return "Processing img...";
     }
 
     try {
-      // Captures the image and saves it to the
-      // provided path
       final image = await _controller.takePicture();
       return image.path;
     } on CameraException catch (e) {
-      // print("Camera Exception: $e");
+      if(isDev) print("Camera Exception: $e");
       return e.toString();
     }
   }
@@ -132,7 +116,7 @@ class _CamScanState extends State<CamScan> {
       }
       setState(() {});
     });
-    timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => trial());
+    timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => scan());
   }
 
   @override
@@ -141,20 +125,21 @@ class _CamScanState extends State<CamScan> {
     super.dispose();
   }
 
-  trial() async{
+  scan() async{
     setState(()=> tick = false);
-    // print("Reached Timer");
     setState(()=> _load = true);
+
     await _takePicture().then((String path) async  {
-      // print("Taken Picture");
+
       if (path != null) {
-        // print("Clicked");
-        // String studentId = await scan(path);
-        String studentId = await getText(path);
-        // print("Student id: ${studentId}");
+
+        if(isDev) print("Picture captured");
+
+        bool studentIdIsSaved = await saveId(path);
+        if(isDev) print("studentIdIsSaved: " + studentIdIsSaved.toString());
         setState(()=> _load = false);
 
-        if(studentId != "" && studentId == "0"){
+        if(!studentIdIsSaved){
           // put cross sign
           setState(()=> cross = true);
           Future.delayed(const Duration(seconds: 1), () {
@@ -162,10 +147,7 @@ class _CamScanState extends State<CamScan> {
               cross = false;
             });
           });
-        }else if(studentId != "" && studentId.length != 9){
-          ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
-        }
-        else if(studentId != "" && studentId.length == 9){
+        }else {
           setState(()=> tick = true);
           Future.delayed(const Duration(seconds: 1), () {
             setState(() {
@@ -174,6 +156,7 @@ class _CamScanState extends State<CamScan> {
           });
         }
       }else{
+        if(isDev) print("Some error occured while capturing the image");
         setState(()=> _load = false);
         ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
       }
@@ -186,7 +169,7 @@ class _CamScanState extends State<CamScan> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       body: _controller.value.isInitialized
@@ -228,7 +211,7 @@ class _CamScanState extends State<CamScan> {
                       onTap: (){
                         timer.cancel();
                         _controller.dispose();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId, widget.branch, widget.subject,widget.id)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId)));
                       },
                       child: Container(
                         height: 60,
