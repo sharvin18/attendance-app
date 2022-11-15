@@ -1,6 +1,9 @@
+import 'package:marku/Authentication/dbdata.dart';
+import 'package:marku/Helpers/utils.dart';
 import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/home.dart';
 import 'package:marku/Screens/confirmAttendance.dart';
+import 'package:marku/Screens/loading.dart';
 import 'package:marku/main.dart';
 
 import 'package:google_ml_kit/google_ml_kit.dart';
@@ -14,7 +17,7 @@ import 'dart:async';
 import 'dart:io';
 
 class CamScan extends StatefulWidget {
-  final List presentId;
+  final List<List> presentId;
   const CamScan(this.presentId);
 
   @override
@@ -31,6 +34,10 @@ class _CamScanState extends State<CamScan> {
   bool tick = false;
   bool cross = false;
   bool isDev = true;
+  late List<List> invalidIds = [];
+  var displayDate;
+  var storeDate;
+  bool _loading = false;
 
   Future<bool> saveId(String path) async {
     final inputImage = InputImage.fromFilePath(path);
@@ -68,7 +75,11 @@ class _CamScanState extends State<CamScan> {
           List idno = line.text.toString().split(" ");
           if (isDev) print(idno[idno.length - 1]);
           if(!widget.presentId.contains(idno[idno.length - 1])){
-            widget.presentId.add(idno[idno.length - 1]);
+            List temp = [];
+            DateTime currTime = DateTime.now();
+            temp.add(idno[idno.length - 1]);
+            temp.add(currTime);
+            widget.presentId.add(temp);
           }
           return true;
         }
@@ -109,6 +120,8 @@ class _CamScanState extends State<CamScan> {
   @override
   void initState() {
     super.initState();
+    storeDate = getTodaysDate();
+    displayDate = formatDateDMY(storeDate);
     _controller = CameraController(cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
       if (!mounted) {
@@ -122,6 +135,7 @@ class _CamScanState extends State<CamScan> {
   @override
   void dispose() {
     _controller.dispose();
+    // timer.cancel();
     super.dispose();
   }
 
@@ -172,7 +186,7 @@ class _CamScanState extends State<CamScan> {
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
-      body: _controller.value.isInitialized
+      body: _loading == true? Loading("Organizing data") : _controller.value.isInitialized
           ? Stack(
         children: <Widget>[
           CameraPreview(_controller),
@@ -189,7 +203,7 @@ class _CamScanState extends State<CamScan> {
                     GestureDetector(
                       onTap: (){
                         timer.cancel();
-                        _controller.dispose();
+                        // _controller.dispose();
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (builder) => const Home()),
@@ -208,10 +222,27 @@ class _CamScanState extends State<CamScan> {
                     ),
 
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
                         timer.cancel();
-                        _controller.dispose();
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId)));
+                        // _controller.dispose();
+                        setState(() {
+                          _loading = true;
+                        });
+                        invalidIds = await getInvalidIds(widget.presentId, displayDate);
+                        setState(() {
+                          for(int i=0; i<invalidIds.length; i++){
+                            widget.presentId.remove(invalidIds[i][0]);
+                          }
+                        });
+
+                        List temp = [];
+                        temp.add("191183101");
+                        temp.add("Sharvin Dedhia");
+                        invalidIds.add(temp);
+                        // setState(() {
+                        //   _loading = false;
+                        // });
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId, invalidIds)));
                       },
                       child: Container(
                         height: 60,

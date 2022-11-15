@@ -65,6 +65,80 @@ SnackBar snackBar(String text, bool col){
   );
 }
 
+displayInvalidIds(BuildContext context, List data) {
+
+  var height = MediaQuery.of(context).size.height;
+  // set up the buttons
+  Widget okButton = TextButton(
+    child: Text(
+      "Ok",
+      style: TextStyle(
+        fontFamily: "Medium",
+        fontSize: 18.0,
+        color: Colors.green,
+      ),
+    ),
+    onPressed:  () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Invalid"),
+    content: Container(
+      height: height*0.6,
+      child: SingleChildScrollView(
+        child: ListView.separated(
+          physics: NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
+          separatorBuilder: (BuildContext context, int index) =>
+              Divider(height: 30, color: dividerColor,),
+          scrollDirection: Axis.vertical,
+          itemCount: data.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    data[index][1],
+                    style: TextStyle(
+                      fontFamily: "Medium",
+                      fontSize: 14.0,
+                      color: themeColor == "dark"? Colors.black: Colors.white,
+                    ),
+                  ),
+                  Text(
+                    data[index][0],
+                    style: TextStyle(
+                      fontFamily: "Regular",
+                      fontSize: 12.0,
+                      color: themeColor == "dark"? Colors.black: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    ),
+    actions:[
+      okButton
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
 String getFormattedDate(String dt){
   List dateList = dt.split("-");
   String temp = dateList[0];

@@ -13,8 +13,9 @@ import 'package:intl/intl.dart';
 
 
 class ConfirmAttendance extends StatefulWidget {
-  final List attendance;
-  const ConfirmAttendance(this.attendance);
+  final List<List> attendance;
+  final List<List> invalidIds;
+  const ConfirmAttendance(this.attendance, this.invalidIds);
 
   @override
   _ConfirmAttendanceState createState() => _ConfirmAttendanceState();
@@ -25,9 +26,8 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   var storeDate;
   String displayDate="", strength="";
   List details = [];
-  bool _loading = false;
-
-  late List invalidIds;     // keeps a track of all invalid ids due to 30min rule.
+  bool _loading = false, isInvalid=false;
+  late List ids = [];
 
   final snack = SnackBar(
     backgroundColor: Colors.black.withOpacity(0.8),
@@ -41,25 +41,33 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   );
 
   @override
-  void initState() async {
+  void initState() {
     // TODO: implement initState
     super.initState();
-
     storeDate = getTodaysDate();
     displayDate = formatDateDMY(storeDate);
-    invalidIds = await getInvalidIds(widget.attendance, displayDate);
+
+    print("Invalid details: " + widget.invalidIds[0].toString());
+    setids();
+    if(widget.invalidIds.isNotEmpty){
+      print("Invalid details: " + widget.invalidIds.toString());
+      // displayInvalidIds(context, widget.invalidIds);
+      isInvalid = true;
+    }
+
   }
 
-  // getStrength(){
-  //   int totalPresent = widget.attendance.length;
-  //   int totalStrength = widget.total_id.length;
-  //   strength = totalPresent.toString() + "/" + totalStrength.toString();
-  // }
+  setids(){
+    for(int i=0; i<widget.attendance.length; i++){
+      ids.add(widget.attendance[i][0]);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
+
     return _loading ? Loading("Saving Attendance ...") :
     WillPopScope(
       onWillPop: () async => false,
@@ -175,10 +183,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                           children: [
                             StreamBuilder<QuerySnapshot>(
                                 stream: FirebaseFirestore.instance
-                                    .collection(details[1].toLowerCase())
-                                    .doc(details[0])
-                                    .collection('students')
-                                    .orderBy('roll', descending: false)
+                                    .collection(studentCollection)
                                     .snapshots(),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) {
@@ -226,26 +231,16 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
 
                                                 DocumentSnapshot<dynamic> studentlist = snapshot.data!.docs[index];
                                                 var id = studentlist.data()['id'];
-                                                var roll = studentlist.data()['roll'];
                                                 var name = studentlist.data()['name'];
+                                                print(studentlist);
 
-
-                                                return widget.attendance.contains(id.toString()) ? Column(
+                                                return ids.contains(id.toString()) ? Column(
                                                   children: [
                                                     Row(
                                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                       children: [
                                                         Row(
                                                           children: [
-                                                            Text(
-                                                              "${roll.toString()}. ",
-                                                              style: TextStyle(
-                                                                fontFamily: "Regular",
-                                                                fontWeight: FontWeight.w500,
-                                                                fontSize: 20.0,
-                                                                color: textColor,
-                                                              ),
-                                                            ),
                                                             Text(
                                                               name,
                                                               style: TextStyle(
@@ -258,7 +253,6 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                                           ],
                                                         ),Text(
                                                           id,
-                                                          //studentlist.data()['id'],
                                                           style: TextStyle(
                                                             fontFamily: "Regular",
                                                             fontSize: 20.0,
@@ -284,7 +278,8 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                   )
                 ],
               ),
-            )
+            ),
+            // isInvalid? displayInvalidIds(context, widget.invalidIds): Container()
           ],
         ),
       ),

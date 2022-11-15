@@ -68,6 +68,7 @@ class _StudentDetailsState extends State<StudentDetails> {
         cancelButton,
         continueButton,
       ],
+
     );
 
     // show the dialog
@@ -177,10 +178,7 @@ class _StudentDetailsState extends State<StudentDetails> {
                         children: [
                           StreamBuilder<QuerySnapshot>(
                             stream: FirebaseFirestore.instance
-                                .collection(detail[1].toLowerCase())
-                                .doc(detail[0])
-                                .collection('students')
-                                .orderBy('roll', descending: false)
+                                .collection(studentCollection)
                                 .snapshots(),
                             builder: (context, snapshot) {
                               if (snapshot.hasError) {
@@ -240,15 +238,6 @@ class _StudentDetailsState extends State<StudentDetails> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      Text(
-                                                        "${studentlist.data()['roll']}. ",
-                                                        style: TextStyle(
-                                                          fontFamily: "Regular",
-                                                          fontWeight: FontWeight.w500,
-                                                          fontSize: 18.0,
-                                                          color: textColor,
-                                                        ),
-                                                      ),
                                                       Text(
                                                         studentlist.data()['name'],
                                                         style: TextStyle(

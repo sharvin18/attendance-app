@@ -224,10 +224,10 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(top: 30.0),
                               child: GestureDetector(
                                 onTap: () async {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(builder: (context) => ExcelSheet())
-                                  );
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(builder: (context) => ExcelSheet())
+                                  // );
                                 },
                                 child: Container(
                                   height: 150,

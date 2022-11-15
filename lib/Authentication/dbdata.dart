@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:marku/Helpers/widgets.dart';
 
+import '../Helpers/utils.dart';
+
 // App constants
 String name="", email="", profileimg="", themeColor="";
 bool existence=false;
@@ -129,17 +131,49 @@ Future<List> getStudents(String year, String branch) async {
 
 // Client update:
 // Used in confirm attendance page to check the 30min time rule.
-Future<List> getInvalidIds(List attendance, String date) async {
-  List invalids = [];
+Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
+  List<List> invalids = [];    // invalids = 2dList -> 0->ids, 1->names
+  List invalid = [];
+  List ids=[];
+  late DateTime datetime;
+  print("Entered in db query: ");
+  print("Intial attendance list: " + attendance.toString());
+  // Check if id is present in student collection
+  await FirebaseFirestore.instance
+      .collection(studentCollection)
+      .get().then((querySnapshot){
+    for (var result in querySnapshot.docs) {
+      ids.add(result.data()["id"]);
+    }
+  });
+
+  for(int i=0; i<attendance.length; i++){
+    if(!ids.contains(attendance[i][0])) invalid.add(attendance[i][0]);
+  }
+  // Removing the invalid data from list
+  List<List> att = [];
+  for(int i=0; i<attendance.length; i++){
+    if(!invalid.contains(attendance[i][0])) {
+      List temp = attendance[i];
+      att.add(temp);
+    }
+  }
+  attendance = att;
+  print("Removed invalid students: " + attendance.toString());
 
   await FirebaseFirestore.instance
       .collection(attendanceCollection)
       .doc(date).get()
       .then((docSnapshot) => {
       if (docSnapshot.exists) {
-        print(docSnapshot.data().toString())
-
-
+        for(int i=0; i<attendance.length; i++){
+          if(docSnapshot.data()!.containsKey(attendance[i][0])){
+            datetime = docSnapshot.data()![attendance[i][0]]["in"],
+            if (!isValidAttendance(datetime, attendance[i][1])){
+              invalid.add(attendance[i][0])
+            }
+          }
+        }
           // Add 30min rule logic here
           // If id is present and diff in time is < 30mins, then add id to invalids.
           // Else continue;
@@ -147,5 +181,18 @@ Future<List> getInvalidIds(List attendance, String date) async {
 
   });
 
+  await FirebaseFirestore.instance
+      .collection(studentCollection)
+      .get().then((querySnapshot){
+    for (var result in querySnapshot.docs) {
+      if (invalid.contains!(result.data()["id"])){
+        List temp = [];
+        temp.add(result.data()["id"]);
+        temp.add(result.data()["name"]);
+        invalids.add(temp);
+      }
+    }
+  });
+  print("Invalids: " + invalids.toString());
   return invalids;
 }
