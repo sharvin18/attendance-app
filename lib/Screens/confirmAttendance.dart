@@ -42,12 +42,13 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
     duration: const Duration(seconds: 2),
   );
 
-  displayInvalidIds(BuildContext context, List data) {
-
+  displayInvalidIds(BuildContext context, List<List> data) {
+    print("DATA: " +data.toString());
     var h = MediaQuery.of(context).size.height;
+    var w = MediaQuery.of(context).size.width;
     // set up the buttons
     Widget okButton = TextButton(
-      child: Text(
+      child: const Text(
         "Ok",
         style: TextStyle(
           fontFamily: "Medium",
@@ -56,68 +57,113 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
         ),
       ),
       onPressed:  () {
-        // Navigator.of(context).pop();
-        setState(() {
-          isInvalid = false;
-        });
+        Navigator.of(context).pop();
+        // setState(() {
+        //   isInvalid = false;
+        // });
       },
     );
 
     // set up the AlertDialog
-    // AlertDialog alert = AlertDialog(
-    //   title: Text("Invalid"),
-    //   content: Container(
-    //     height: h*0.6,
-    //     child: SingleChildScrollView(
-    //       child: ListView.separated(
-    //         physics: NeverScrollableScrollPhysics(),
-    //         shrinkWrap: true,
-    //         separatorBuilder: (BuildContext context, int index) =>
-    //             Divider(height: 30, color: dividerColor,),
-    //         scrollDirection: Axis.vertical,
-    //         itemCount: data.length,
-    //         itemBuilder: (BuildContext context, int index) {
-    //           return Padding(
-    //             padding: EdgeInsets.only(left: 20),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //               children: [
-    //                 Text(
-    //                   data[index][1],
-    //                   style: TextStyle(
-    //                     fontFamily: "Medium",
-    //                     fontSize: 14.0,
-    //                     color: themeColor == "dark"? Colors.black: Colors.white,
-    //                   ),
-    //                 ),
-    //                 Text(
-    //                   data[index][0],
-    //                   style: TextStyle(
-    //                     fontFamily: "Regular",
-    //                     fontSize: 12.0,
-    //                     color: themeColor == "dark"? Colors.black: Colors.white,
-    //                   ),
-    //                 ),
-    //               ],
-    //             ),
-    //           );
-    //         },
-    //       ),
-    //     ),
-    //   ),
-    //   actions:[
-    //     okButton
-    //   ],
-    // );
+    AlertDialog alertDia = AlertDialog(
+      // backgroundColor: Colors.grey[350],
+      title: const Text("Invalid"),
+      content: Material(
+        elevation: 2,
+        child: Container(
+          height: h*0.4,
+          width: w*0.8,
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            // color:bgColor,
+          ),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: ListView.separated(
+              padding: const EdgeInsets.all(20),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (BuildContext context, int index) =>
+                  Divider(height: 30, color: dividerColor,),
+              scrollDirection: Axis.vertical,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+               return Row(
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Text(
+                       data[0][1],
+                       style: TextStyle(
+                         fontFamily: "Medium",
+                         fontSize: 18.0,
+                         color: themeColor == "dark"? Colors.white: Colors.black,
+                       ),
+                   ),
+                   Text(
+                     data[0][0],
+                     style: TextStyle(
+                       fontFamily: "Medium",
+                       fontSize: 14.0,
+                       color: themeColor == "dark"? Colors.white: Colors.black,
+                     ),
+                   ),
+                 ],
+               );
+              }
+            ),
+          ),
+        ),
+      ),
+      actions:[
+        okButton
+      ],
+    );
+    AlertDialog alert = AlertDialog(
+      title: const Text("Invalid"),
+      content: Material(
+        elevation: 20,
+        child: Container(
+          height: h*0.4,
+          child: SingleChildScrollView(
+            child: ListView.separated(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              separatorBuilder: (BuildContext context, int index) =>
+                  Divider(height: 30, color: dividerColor,),
+              scrollDirection: Axis.vertical,
+              itemCount: data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        data[index][1],
+                        style: TextStyle(
+                          fontFamily: "Medium",
+                          fontSize: 14.0,
+                          color: themeColor == "dark"? Colors.black: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+      ),
+      actions:[
+        okButton
+      ],
+    );
 
     // show the dialog
     return showDialog(
       context: context,
       builder: (context) {
-        return Container(
-          height: h,
-          color: Colors.black.withOpacity(0.5),
-        );
+        return alertDia;
       },
     );
   }
@@ -129,15 +175,15 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
     storeDate = getTodaysDate();
     displayDate = formatDateYMD(storeDate);
 
-    print("Invalid details: " + widget.invalidIds[0].toString());
+    print("Invalid details: " + widget.invalidIds.toString());
     setids();
-    if(widget.invalidIds.isNotEmpty){
-      print("Invalid details: " + widget.invalidIds.toString());
-      // displayInvalidIds(context, widget.invalidIds);
-      Future.delayed(const Duration(seconds: 1), () async {
-        isInvalid = true;
-      });
-    }
+    // if(widget.invalidIds.isNotEmpty){
+    //   print("Invalid details: " + widget.invalidIds.toString());
+    //   // displayInvalidIds(context, widget.invalidIds);
+    //   Future.delayed(const Duration(seconds: 1), () async {
+    //     isInvalid = true;
+    //   });
+    // }
 
   }
 
@@ -151,7 +197,10 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
-
+    if(widget.invalidIds.isNotEmpty) {
+      print("displaying invalids");
+      Future.delayed(Duration.zero, () => displayInvalidIds(context, widget.invalidIds));
+    }
     return _loading ? Loading("Saving Attendance ...") :
     WillPopScope(
       onWillPop: () async => false,
@@ -201,7 +250,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                     onPressed: () async {
                                       if(widget.attendance.isNotEmpty){
                                         setState(()=> _loading = true);
-                                        // await markAttendance(widget.attendance, storeDate);
+                                        await markAttendance(widget.attendance, storeDate);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(builder: (context)=>Home()),
@@ -363,7 +412,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                 ],
               ),
             ),
-            isInvalid? displayInvalidIds(context, widget.invalidIds): Container()
+            // isInvalid? displayInvalidIds(context, widget.invalidIds): Container()
           ],
         ),
       ),

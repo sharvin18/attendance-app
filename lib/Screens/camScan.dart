@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/utils.dart';
 import 'package:marku/Helpers/widgets.dart';
@@ -122,6 +123,10 @@ class _CamScanState extends State<CamScan> {
     super.initState();
     storeDate = getTodaysDate();
     displayDate = formatDateDMY(storeDate);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     _controller = CameraController(cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
       if (!mounted) {
@@ -129,13 +134,17 @@ class _CamScanState extends State<CamScan> {
       }
       setState(() {});
     });
+    _controller.lockCaptureOrientation();
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => scan());
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    // timer.cancel();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     super.dispose();
   }
 
@@ -183,13 +192,31 @@ class _CamScanState extends State<CamScan> {
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
+    final size = MediaQuery.of(context).size;
+    final deviceRatio = width / height;
+    var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
     return Scaffold(
       key: _scaffoldKey,
       body: _loading == true? Loading("Organizing data") : _controller.value.isInitialized
           ? Stack(
         children: <Widget>[
-          CameraPreview(_controller),
+          SizedBox(
+            width: size.width,
+            height: size.height,
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                  width: isPortrait
+                      ? _controller!.value.previewSize!.height
+                      : _controller!.value.previewSize!.width,
+                  height: isPortrait
+                      ? _controller!.value.previewSize!.width
+                      : _controller!.value.previewSize!.height,
+                  child: CameraPreview(_controller!)),
+            ),
+          ),
+          // CameraPreview(_controller),
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -239,6 +266,17 @@ class _CamScanState extends State<CamScan> {
                         temp.add("191183101");
                         temp.add("Sharvin Dedhia");
                         invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+                        invalidIds.add(temp);
+
                         // setState(() {
                         //   _loading = false;
                         // });
@@ -260,7 +298,7 @@ class _CamScanState extends State<CamScan> {
             ),
           ),
           _load ? Container(
-            height: height,
+            height: height*0.6,
             width: width,
             color: Colors.transparent,
             child: Center(
@@ -271,7 +309,7 @@ class _CamScanState extends State<CamScan> {
             ),
           ) : Container(),
           tick ? Container(
-            height: height,
+            height: height*0.6,
             width: width,
             color: Colors.transparent,
             child: Center(
@@ -286,7 +324,7 @@ class _CamScanState extends State<CamScan> {
               ),
             ),
           ): cross? Container(
-            height: height,
+            height: height*0.6,
             width: width,
             color: Colors.transparent,
             child: Center(
