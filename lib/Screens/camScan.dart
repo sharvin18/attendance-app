@@ -18,8 +18,9 @@ import 'dart:async';
 import 'dart:io';
 
 class CamScan extends StatefulWidget {
-  final List<List> presentId;
-  const CamScan(this.presentId);
+  final List<List> presentDetails;
+  final List presentId;
+  const CamScan(this.presentDetails, this.presentId);
 
   @override
   _CamScanState createState() => _CamScanState();
@@ -39,6 +40,7 @@ class _CamScanState extends State<CamScan> {
   var displayDate;
   var storeDate;
   bool _loading = false;
+  bool _goBack = false;
 
   Future<bool> saveId(String path) async {
     final inputImage = InputImage.fromFilePath(path);
@@ -80,7 +82,8 @@ class _CamScanState extends State<CamScan> {
             DateTime currTime = DateTime.now();
             temp.add(idno[idno.length - 1]);
             temp.add(currTime);
-            widget.presentId.add(temp);
+            widget.presentDetails.add(temp);
+            widget.presentId.add(idno[idno.length - 1]);
           }
           return true;
         }
@@ -102,7 +105,7 @@ class _CamScanState extends State<CamScan> {
     final String visionDir = '${appDocDir.path}/Photos/VisionImages';
     await Directory(visionDir).create(recursive: true);
     // final String imagePath = '$visionDir/image_$formattedDateTime.jpg';
-
+    // if(_goBack) return;
     if (_controller.value.isTakingPicture) {
       // print("Processing is in progress...");
       return "Processing img...";
@@ -123,10 +126,9 @@ class _CamScanState extends State<CamScan> {
     super.initState();
     storeDate = getTodaysDate();
     displayDate = formatDateDMY(storeDate);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    bool _goBack = false;
+    invalidIds = [];
+
     _controller = CameraController(cameras[0], ResolutionPreset.medium);
     _controller.initialize().then((_) {
       if (!mounted) {
@@ -134,58 +136,54 @@ class _CamScanState extends State<CamScan> {
       }
       setState(() {});
     });
-    _controller.lockCaptureOrientation();
     timer = Timer.periodic(const Duration(seconds: 3), (Timer t) => scan());
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
     super.dispose();
   }
 
-  scan() async{
-    setState(()=> tick = false);
-    setState(()=> _load = true);
-
-    await _takePicture().then((String path) async  {
-
+  scan() async {
+    setState(() => tick = false);
+    setState(() => _load = true);
+    if (_goBack) return;
+    await _takePicture().then((String path) async {
       if (path != null) {
+        if (isDev) print("Picture captured");
 
-        if(isDev) print("Picture captured");
-
+        if (_goBack) return;
         bool studentIdIsSaved = await saveId(path);
-        if(isDev) print("studentIdIsSaved: " + studentIdIsSaved.toString());
-        setState(()=> _load = false);
+        if (isDev) print("studentIdIsSaved: " + studentIdIsSaved.toString());
+        setState(() => _load = false);
 
-        if(!studentIdIsSaved){
+        if (!studentIdIsSaved) {
           // put cross sign
-          setState(()=> cross = true);
+          setState(() => cross = true);
           Future.delayed(const Duration(seconds: 1), () {
+            if (_goBack) return;
             setState(() {
               cross = false;
             });
           });
-        }else {
-          setState(()=> tick = true);
+        } else {
+          setState(() => tick = true);
           Future.delayed(const Duration(seconds: 1), () {
+            if (_goBack) return;
             setState(() {
               tick = false;
             });
           });
         }
-      }else{
-        if(isDev) print("Some error occured while capturing the image");
-        setState(()=> _load = false);
-        ScaffoldMessenger.of(context).showSnackBar(snackBar("Couldn\'t scan the ID, Try Again.", false));
+      } else {
+        if (isDev) print("Some error occured while capturing the image");
+        if (_goBack) return;
+        setState(() => _load = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+            snackBar("Couldn\'t scan the ID, Try Again.", false));
       }
-
     });
-
   }
 
   @override
@@ -208,12 +206,12 @@ class _CamScanState extends State<CamScan> {
               fit: BoxFit.cover,
               child: SizedBox(
                   width: isPortrait
-                      ? _controller!.value.previewSize!.height
-                      : _controller!.value.previewSize!.width,
+                      ? _controller.value.previewSize!.height
+                      : _controller.value.previewSize!.width,
                   height: isPortrait
-                      ? _controller!.value.previewSize!.width
-                      : _controller!.value.previewSize!.height,
-                  child: CameraPreview(_controller!)),
+                      ? _controller.value.previewSize!.width
+                      : _controller.value.previewSize!.height,
+                  child: CameraPreview(_controller)),
             ),
           ),
           // CameraPreview(_controller),
@@ -228,9 +226,18 @@ class _CamScanState extends State<CamScan> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: (){
+                      onTap: () async {
                         timer.cancel();
                         // _controller.dispose();
+                        // if (_load) {
+                        //   await Future.doWhile(() => Future.delayed(interval).then((_) => {
+                        //     Navigator.pushAndRemoveUntil(
+                        //     context,
+                        //     MaterialPageRoute(builder: (builder) => const Home()),
+                        //     (route) => false);
+                        //   }));
+                        // }
+                        // await Future.doWhile(() => _load);
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (builder) => const Home()),
@@ -255,32 +262,32 @@ class _CamScanState extends State<CamScan> {
                         setState(() {
                           _loading = true;
                         });
-                        invalidIds = await getInvalidIds(widget.presentId, displayDate);
+                        invalidIds = await getInvalidIds(widget.presentDetails, displayDate);
                         setState(() {
                           for(int i=0; i<invalidIds.length; i++){
-                            widget.presentId.remove(invalidIds[i][0]);
+                            widget.presentDetails.remove(invalidIds[i][0]);
                           }
                         });
 
-                        List temp = [];
-                        temp.add("191183101");
-                        temp.add("Sharvin Dedhia");
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
-                        invalidIds.add(temp);
+                        // List temp = [];
+                        // temp.add("191183101");
+                        // temp.add("Sharvin Dedhia");
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
+                        // invalidIds.add(temp);
 
                         // setState(() {
                         //   _loading = false;
                         // });
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentId, invalidIds)));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmAttendance(widget.presentDetails, invalidIds, widget.presentId)));
                       },
                       child: Container(
                         height: 60,

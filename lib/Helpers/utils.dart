@@ -18,5 +18,6 @@ String formatDateDMY(DateTime date){
 
 bool isValidAttendance(DateTime startTime, DateTime endTime){
   int diffInMins = endTime.difference(startTime).inMinutes;
+  print("diff in minssss: "+diffInMins.toString());
   return diffInMins >= 30 ? true: false;
 }

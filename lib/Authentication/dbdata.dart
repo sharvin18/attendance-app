@@ -75,25 +75,35 @@ Future markAttendance(List<List> attendance, var date) async {
   DocumentSnapshot<Map<String, dynamic>> attendanceData = await FirebaseFirestore.instance.
                                                       collection(attendanceCollection).
                                                       doc(date).get();
+  final Map<String, dynamic> map;
+  if (attendanceData.exists) {
 
-  final Map<String, dynamic> map = attendanceData.data()!;
-  for(var dates in map.keys){
-    if(debugMode) {
-      print(dates);
-      print(map[dates]["in"]);
-      print(map[dates]["out"]);
+    map = attendanceData.data()!;
+    for(var dates in map.keys){
+      if(debugMode) {
+        print(dates);
+        print(map[dates]["in"]);
+        print(map[dates]["out"]);
+      }
     }
-  }
-
-  for(List details in attendance){
-    if(map.containsKey(details[0])){
-      map[details[0]]["out"] = details[1];
-    }else{
+    for(List details in attendance){
+      if(map.containsKey(details[0])){
+        map[details[0]]["out"] = details[1];
+      }else{
+        map[details[0]]={
+          "in": details[1]
+        };
+      }
+    }
+  }else{
+    map = {};
+    for(List details in attendance){
       map[details[0]]={
         "in": details[1]
       };
     }
   }
+
 
   if(debugMode) {
     for(var dates in map.keys){
@@ -185,6 +195,7 @@ Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
   for(int i=0; i<attendance.length; i++){
     if(!ids.contains(attendance[i][0])) invalid.add(attendance[i][0]);
   }
+  if(debugMode) print("Invalid student not in db: "+invalid.toString());
   // Removing the invalid data from list
   List<List> att = [];
   for(int i=0; i<attendance.length; i++){
@@ -213,19 +224,29 @@ Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
       }
     }
   });
-
+  List valid = [];
   await FirebaseFirestore.instance
       .collection(studentCollection)
       .get().then((querySnapshot){
     for (var result in querySnapshot.docs) {
-      if (invalid.contains!(result.data()["id"])){
+      if (invalid.contains(result.data()["id"])){
         List temp = [];
         temp.add(result.data()["id"]);
         temp.add(result.data()["name"]);
         invalids.add(temp);
       }
+      valid.add(result.data()["id"]);
     }
   });
+
+  for(String k in invalid){
+    if(!valid.contains(k)){
+      List temp = [];
+      temp.add(k);
+      temp.add("Id not found");
+      invalids.add(temp);
+    }
+  }
   if (debugMode) print("Invalids: " + invalids.toString());
   return invalids;
 

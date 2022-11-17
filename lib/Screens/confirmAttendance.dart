@@ -17,7 +17,8 @@ import '../Helpers/widgets.dart';
 class ConfirmAttendance extends StatefulWidget {
   final List<List> attendance;
   final List<List> invalidIds;
-  const ConfirmAttendance(this.attendance, this.invalidIds);
+  final List presentIds;
+  const ConfirmAttendance(this.attendance, this.invalidIds, this.presentIds);
 
   @override
   _ConfirmAttendanceState createState() => _ConfirmAttendanceState();
@@ -30,6 +31,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   List details = [];
   bool _loading = false, isInvalid=false;
   late List ids = [];
+  List<List> invalidId = [];
 
   final snack = SnackBar(
     backgroundColor: Colors.black.withOpacity(0.8),
@@ -57,10 +59,10 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
         ),
       ),
       onPressed:  () {
+        setState(() {
+          invalidId=[];
+        });
         Navigator.of(context).pop();
-        // setState(() {
-        //   isInvalid = false;
-        // });
       },
     );
 
@@ -176,6 +178,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
     displayDate = formatDateYMD(storeDate);
 
     print("Invalid details: " + widget.invalidIds.toString());
+    if(widget.invalidIds.isNotEmpty)invalidId=widget.invalidIds;
     setids();
     // if(widget.invalidIds.isNotEmpty){
     //   print("Invalid details: " + widget.invalidIds.toString());
@@ -197,7 +200,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
   Widget build(BuildContext context) {
     var h = MediaQuery.of(context).size.height;
     var w = MediaQuery.of(context).size.width;
-    if(widget.invalidIds.isNotEmpty) {
+    if(invalidId.isNotEmpty) {
       print("displaying invalids");
       Future.delayed(Duration.zero, () => displayInvalidIds(context, widget.invalidIds));
     }
@@ -228,7 +231,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                 child: IconButton(
                                     icon: Icon(Icons.arrow_back, color: Colors.white, size: 28.0,),
                                     onPressed: (){
-                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CamScan(widget.attendance)));
+                                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => CamScan(widget.attendance, widget.presentIds)));
                                     }
                                 ),
                               ),
@@ -250,7 +253,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                     onPressed: () async {
                                       if(widget.attendance.isNotEmpty){
                                         setState(()=> _loading = true);
-                                        await markAttendance(widget.attendance, storeDate);
+                                        await markAttendance(widget.attendance, displayDate);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(builder: (context)=>Home()),

@@ -115,7 +115,7 @@ class _HomeState extends State<Home> {
                                   onTap: () async {
                                     Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => CamScan([]))
+                                        MaterialPageRoute(builder: (context) => CamScan([], []))
                                     );
                                   },
                                   child: Container(
