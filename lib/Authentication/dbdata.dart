@@ -10,6 +10,7 @@ String name="", email="", profileimg="", themeColor="";
 bool existence=false;
 bool loading=false;
 int total=0;
+bool debugMode = true;
 
 // Firestore constants
 String studentCollection="student";
@@ -66,14 +67,46 @@ Future changeTheme(String newTheme) async {
   });
 }
 
-Future markAttendance(List attend, String branch, String yr, String sub, var date) async {
+// Client update
+// Called on confirmAttendance page to save attendance
+// Checks if in time is present, if present -- saves the out time else makes new key value for in.
+Future markAttendance(List<List> attendance, var date) async {
+
+  DocumentSnapshot<Map<String, dynamic>> attendanceData = await FirebaseFirestore.instance.
+                                                      collection(attendanceCollection).
+                                                      doc(date).get();
+
+  final Map<String, dynamic> map = attendanceData.data()!;
+  for(var dates in map.keys){
+    if(debugMode) {
+      print(dates);
+      print(map[dates]["in"]);
+      print(map[dates]["out"]);
+    }
+  }
+
+  for(List details in attendance){
+    if(map.containsKey(details[0])){
+      map[details[0]]["out"] = details[1];
+    }else{
+      map[details[0]]={
+        "in": details[1]
+      };
+    }
+  }
+
+  if(debugMode) {
+    for(var dates in map.keys){
+      print(dates+"=> in:"+map[dates]["in"].toString()+"; out:"+map[dates]["out"].toString());
+    }
+  }
+
   return await FirebaseFirestore.instance.
-  collection(branch).
-  doc(yr).
-  collection(sub).
-  doc().set({
-    'present_students': attend,
-    'date': date,
+  collection(attendanceCollection).
+  doc(date).set(map).then((value) => {
+    print("Successfull")
+  }).onError((error, stackTrace) => {
+    print("Error while saving attendance: " + error.toString())
   });
 }
 
@@ -136,8 +169,10 @@ Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
   List invalid = [];
   List ids=[];
   late DateTime datetime;
-  print("Entered in db query: ");
-  print("Intial attendance list: " + attendance.toString());
+  if(debugMode) {
+    print("Entered in db query: ");
+    print("Intial attendance list: " + attendance.toString());
+  }
   // Check if id is present in student collection
   await FirebaseFirestore.instance
       .collection(studentCollection)
@@ -159,26 +194,24 @@ Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
     }
   }
   attendance = att;
-  print("Removed invalid students: " + attendance.toString());
+  if(debugMode) print("Removed invalid students: " + attendance.toString());
 
   await FirebaseFirestore.instance
       .collection(attendanceCollection)
       .doc(date).get()
       .then((docSnapshot) => {
-      if (docSnapshot.exists) {
-        for(int i=0; i<attendance.length; i++){
-          if(docSnapshot.data()!.containsKey(attendance[i][0])){
-            datetime = docSnapshot.data()![attendance[i][0]]["in"],
-            if (!isValidAttendance(datetime, attendance[i][1])){
-              invalid.add(attendance[i][0])
-            }
+    if (docSnapshot.exists) {
+      for(int i=0; i<attendance.length; i++){
+        // If the student has already entered or not with 1st scan
+        if(docSnapshot.data()!.containsKey(attendance[i][0])){
+          datetime = docSnapshot.data()![attendance[i][0]]["in"],
+          // If 1st scan done -- check for 30min interval between 2nd scan.
+          if (!isValidAttendance(datetime, attendance[i][1])){
+            invalid.add(attendance[i][0])
           }
         }
-          // Add 30min rule logic here
-          // If id is present and diff in time is < 30mins, then add id to invalids.
-          // Else continue;
       }
-
+    }
   });
 
   await FirebaseFirestore.instance
@@ -193,6 +226,7 @@ Future<List<List>> getInvalidIds(List<List> attendance, String date) async {
       }
     }
   });
-  print("Invalids: " + invalids.toString());
+  if (debugMode) print("Invalids: " + invalids.toString());
   return invalids;
+
 }

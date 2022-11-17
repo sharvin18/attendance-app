@@ -168,6 +168,10 @@ class _HomeState extends State<Home> {
                               padding: const EdgeInsets.only(top: 30.0),
                               child: GestureDetector(
                                 onTap: () async {
+                                  // DateTime d = DateTime(2022, 11, 16, 12, 11, 20, 20, 200);
+                                  // // DateTime d = DateTime.now();
+                                  // print(d);
+                                  // await markAttendance([["19113101", d], ["191183101", "16 November 2022 at 12:09:03 UTC+5:30"]], "20221116");
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) => StudentDetails("SE-COMPS", "AOA"))

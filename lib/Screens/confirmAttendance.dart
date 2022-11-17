@@ -1,7 +1,7 @@
 import 'package:marku/Authentication/dbdata.dart';
 import 'package:marku/Helpers/constants.dart';
 import 'package:marku/Helpers/utils.dart';
-import 'package:marku/Helpers/widgets.dart';
+// import 'package:marku/Helpers/widgets.dart';
 import 'package:marku/Screens/loading.dart';
 import 'package:marku/Screens/home.dart';
 import 'package:marku/Screens/camScan.dart';
@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
+
+import '../Helpers/widgets.dart';
 
 
 class ConfirmAttendance extends StatefulWidget {
@@ -40,19 +42,101 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
     duration: const Duration(seconds: 2),
   );
 
+  displayInvalidIds(BuildContext context, List data) {
+
+    var h = MediaQuery.of(context).size.height;
+    // set up the buttons
+    Widget okButton = TextButton(
+      child: Text(
+        "Ok",
+        style: TextStyle(
+          fontFamily: "Medium",
+          fontSize: 18.0,
+          color: Colors.green,
+        ),
+      ),
+      onPressed:  () {
+        // Navigator.of(context).pop();
+        setState(() {
+          isInvalid = false;
+        });
+      },
+    );
+
+    // set up the AlertDialog
+    // AlertDialog alert = AlertDialog(
+    //   title: Text("Invalid"),
+    //   content: Container(
+    //     height: h*0.6,
+    //     child: SingleChildScrollView(
+    //       child: ListView.separated(
+    //         physics: NeverScrollableScrollPhysics(),
+    //         shrinkWrap: true,
+    //         separatorBuilder: (BuildContext context, int index) =>
+    //             Divider(height: 30, color: dividerColor,),
+    //         scrollDirection: Axis.vertical,
+    //         itemCount: data.length,
+    //         itemBuilder: (BuildContext context, int index) {
+    //           return Padding(
+    //             padding: EdgeInsets.only(left: 20),
+    //             child: Row(
+    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //               children: [
+    //                 Text(
+    //                   data[index][1],
+    //                   style: TextStyle(
+    //                     fontFamily: "Medium",
+    //                     fontSize: 14.0,
+    //                     color: themeColor == "dark"? Colors.black: Colors.white,
+    //                   ),
+    //                 ),
+    //                 Text(
+    //                   data[index][0],
+    //                   style: TextStyle(
+    //                     fontFamily: "Regular",
+    //                     fontSize: 12.0,
+    //                     color: themeColor == "dark"? Colors.black: Colors.white,
+    //                   ),
+    //                 ),
+    //               ],
+    //             ),
+    //           );
+    //         },
+    //       ),
+    //     ),
+    //   ),
+    //   actions:[
+    //     okButton
+    //   ],
+    // );
+
+    // show the dialog
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return Container(
+          height: h,
+          color: Colors.black.withOpacity(0.5),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     storeDate = getTodaysDate();
-    displayDate = formatDateDMY(storeDate);
+    displayDate = formatDateYMD(storeDate);
 
     print("Invalid details: " + widget.invalidIds[0].toString());
     setids();
     if(widget.invalidIds.isNotEmpty){
       print("Invalid details: " + widget.invalidIds.toString());
       // displayInvalidIds(context, widget.invalidIds);
-      isInvalid = true;
+      Future.delayed(const Duration(seconds: 1), () async {
+        isInvalid = true;
+      });
     }
 
   }
@@ -117,7 +201,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                                     onPressed: () async {
                                       if(widget.attendance.isNotEmpty){
                                         setState(()=> _loading = true);
-                                        // await markAttendance(widget.attendance, details[1].toLowerCase(), details[0], widget.subject, storeDate);
+                                        // await markAttendance(widget.attendance, storeDate);
                                         Navigator.pushAndRemoveUntil(
                                             context,
                                             MaterialPageRoute(builder: (context)=>Home()),
@@ -279,7 +363,7 @@ class _ConfirmAttendanceState extends State<ConfirmAttendance> {
                 ],
               ),
             ),
-            // isInvalid? displayInvalidIds(context, widget.invalidIds): Container()
+            isInvalid? displayInvalidIds(context, widget.invalidIds): Container()
           ],
         ),
       ),
